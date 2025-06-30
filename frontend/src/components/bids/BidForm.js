@@ -3,6 +3,8 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../styles/BiddingPage.css";
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
 function BiddingPage() {
   const { itemId } = useParams();
   const [item, setItem] = useState(null);
@@ -14,7 +16,7 @@ function BiddingPage() {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/items/${itemId}`);
+        const res = await axios.get(`${BASE_URL}/items/${itemId}`);
         if (res.status === 200) {
           setItem(res.data);
           setCurrentBidder(res.data.currentBidder || "");
@@ -41,10 +43,11 @@ function BiddingPage() {
     }
 
     try {
-      const res = await axios.put(`http://localhost:4000/items/${itemId}/bid`, {
+      const res = await axios.put(`${BASE_URL}/items/${itemId}/bid`, {
         bidder: currentBidder,
         amount: bidAmount,
       });
+
       if (res.status === 200) {
         alert(`Bid of $${bidAmount} placed successfully!`);
         navigate("/items");
