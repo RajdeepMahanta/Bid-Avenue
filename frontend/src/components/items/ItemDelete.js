@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../../styles/ItemDelete.css";
 import axios from "axios";
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
 function ItemDelete() {
   const [items, setItems] = useState([]);
   const [selectedItemId, setSelectedItemId] = useState("");
@@ -15,7 +17,7 @@ function ItemDelete() {
 
   const fetchItems = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/items/itemget");
+      const res = await axios.get(`${BASE_URL}/items/itemget`);
       if (res.status === 200) {
         setItems(res.data);
       } else {
@@ -29,7 +31,7 @@ function ItemDelete() {
 
   const fetchSelectedItemDetails = async (itemId) => {
     try {
-      const res = await axios.get(`http://localhost:4000/items/${itemId}`);
+      const res = await axios.get(`${BASE_URL}/items/${itemId}`);
       if (res.status === 200) {
         setSelectedItemDetails(res.data);
       } else {
@@ -44,13 +46,14 @@ function ItemDelete() {
   const handleDelete = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:4000/items/${selectedItemId}`,
-        {
-          headers: {
+        `${BASE_URL}/items/${selectedItemId}`,
+          {
+            headers: {
             Authorization: `Bearer ${adminPasscode}`,
-          },
-        }
+            },
+          }
       );
+
       if (res.status === 200) {
         alert("Item deleted successfully");
         fetchItems(); // Refresh items list after deletion
