@@ -10,7 +10,7 @@ function Login() {
     event.preventDefault();
     let inputObj = { email, password };
     console.log(inputObj);
-    let url = "http://localhost:4000/auth/login";
+    let url = `${process.env.REACT_APP_BACKEND_URL}/auth/login`;
 
     try {
       const res = await axios.post(url, inputObj);
