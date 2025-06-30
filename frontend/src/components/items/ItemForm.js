@@ -15,24 +15,26 @@ const ItemForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Convert local datetime-local string to UTC ISO string
+    const utcEndTime = new Date(auctionEndTime).toISOString();
+
     const newItem = {
       title,
       description,
       startingBid,
-      auctionEndTime,
+      auctionEndTime: utcEndTime,
     };
 
-    try {
-      
-      const res = await axios.post(`${BASE_URL}/items/createItem`, newItem);
+  try {
+    const res = await axios.post(`${BASE_URL}/items/createItem`, newItem);
+    console.log("Item created successfully:", res.data);
+    navigate("/items");
+  } catch (err) {
+    console.error("Error creating item:", err);
+    alert(err);
+  }
+};
 
-      console.log("Item created successfully:", res.data);
-      navigate("/items");
-    } catch (err) {
-      console.error("Error creating item:", err);
-      alert(err);
-    }
-  };
 
   return (
     <div className="item-form-container">
