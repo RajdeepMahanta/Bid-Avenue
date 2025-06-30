@@ -21,7 +21,7 @@ function ItemsList() {
     const fetchItems = async () => {
       try {
         console.log("Fetching items...");
-        const res = await axios.get("http://localhost:4000/items/itemget");
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/items/itemget`);
         console.log("Response received:", res);
         if (res.status === 200) {
           setItems(res.data);
