@@ -18,7 +18,9 @@ const dbConnect = async () => {
 };
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://bid-avenue.vercel.app'
+}));
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
