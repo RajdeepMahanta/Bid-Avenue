@@ -13,7 +13,7 @@ function Register() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     let inputObj = { username, email, password };
-let url = `${process.env.REACT_APP_BACKEND_URL}/auth/register`;
+    let url = `${process.env.REACT_APP_BACKEND_URL}/api/auth/register`;
 
     try {
       const res = await axios.post(url, inputObj);
