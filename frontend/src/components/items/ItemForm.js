@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/ItemForm.css";
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
 const ItemForm = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -21,10 +23,9 @@ const ItemForm = () => {
     };
 
     try {
-      const res = await axios.post(
-        "http://localhost:4000/items/createItem",
-        newItem
-      );
+      
+      const res = await axios.post(`${BASE_URL}/items/createItem`, newItem);
+
       console.log("Item created successfully:", res.data);
       navigate("/items");
     } catch (err) {
