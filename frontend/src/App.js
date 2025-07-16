@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +13,25 @@ import ItemDelete from "./components/items/ItemDelete";
 import HomePage from "./components/layout/HomePage";
 
 const App = () => {
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Clear login session when browser/tab is closed
+      localStorage.setItem("isLoggedIn", "false");
+      
+      // Also clear admin session if it exists
+      localStorage.removeItem("adminSession");
+      localStorage.removeItem("adminSessionExpiry");
+    };
+
+    // Add event listener for beforeunload (browser/tab close)
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   return (
     <Router>
       <div className="App">
