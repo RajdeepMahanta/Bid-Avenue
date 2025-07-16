@@ -17,6 +17,7 @@ function ItemDelete() {
   const [error, setError] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [sessionTimeRemaining, setSessionTimeRemaining] = useState("");
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true"
   );
@@ -141,10 +142,6 @@ function ItemDelete() {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm(`Are you sure you want to delete "${selectedItemDetails?.title}"? This action cannot be undone.`)) {
-      return;
-    }
-
     setIsDeleting(true);
     setError("");
 
@@ -163,6 +160,7 @@ function ItemDelete() {
         fetchItems(); // Refresh items list after deletion
         setSelectedItemDetails(null); // Clear selected item details after deletion
         setSelectedItemId("");
+        setShowDeleteConfirmation(false); // Close confirmation modal
       } else {
         throw new Error("Failed to delete item");
       }
@@ -173,6 +171,14 @@ function ItemDelete() {
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirmation(false);
   };
 
   const handleSelectItem = (itemId) => {
@@ -344,7 +350,7 @@ function ItemDelete() {
 
               <div className="delete-actions">
                 <button 
-                  onClick={handleDelete} 
+                  onClick={handleDeleteClick} 
                   className="btn-delete"
                   disabled={isDeleting}
                 >
@@ -360,6 +366,43 @@ function ItemDelete() {
                 >
                   Cancel
                 </button>
+              </div>
+            </div>
+          )}
+
+          {/* Delete Confirmation Modal */}
+          {showDeleteConfirmation && selectedItemDetails && (
+            <div className="modal-overlay">
+              <div className="confirmation-modal">
+                <div className="modal-header">
+                  <h3>⚠️ Confirm Deletion</h3>
+                </div>
+                <div className="modal-content">
+                  <p>Are you sure you want to delete this item?</p>
+                  <div className="item-preview">
+                    <strong>"{selectedItemDetails.title}"</strong>
+                    <span>Current Bid: ${selectedItemDetails.currentBid}</span>
+                  </div>
+                  <p className="warning-text">
+                    <strong>This action cannot be undone.</strong>
+                  </p>
+                </div>
+                <div className="modal-actions">
+                  <button 
+                    onClick={handleDelete}
+                    className="btn-confirm-delete"
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? "Deleting..." : "Yes, Delete Item"}
+                  </button>
+                  <button 
+                    onClick={handleCancelDelete}
+                    className="btn-cancel-modal"
+                    disabled={isDeleting}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           )}
