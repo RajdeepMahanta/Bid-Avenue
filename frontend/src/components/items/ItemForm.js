@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import "../../styles/ItemForm.css";
 import "../../styles/Shared.css";
 
@@ -74,9 +75,11 @@ const ItemForm = () => {
       });
       console.log("Item created successfully:", res.data);
       console.log("Response item structure:", res.data);
+      toast.success("Item created successfully!");
       navigate("/items");
     } catch (err) {
       console.error("Error creating item:", err);
+      toast.error("Failed to create item. Please try again.");
       setErrors({ submit: "Failed to create item. Please try again." });
     } finally {
       setIsLoading(false);

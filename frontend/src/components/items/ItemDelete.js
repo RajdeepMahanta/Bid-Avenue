@@ -168,6 +168,7 @@ function ItemDelete() {
       }
     } catch (err) {
       console.error("Error deleting item:", err);
+      toast.error("Failed to delete item. Please try again.");
       setError("Failed to delete item. Please try again.");
     } finally {
       setIsDeleting(false);
@@ -215,6 +216,8 @@ function ItemDelete() {
     
     // Dispatch custom logout event to update navbar
     window.dispatchEvent(new CustomEvent("userLogout"));
+    
+    toast.success("Logged out successfully!");
     
     // Navigate to home page
     navigate("/");

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import "../../styles/Navbar.css";
 
 const Navbar = () => {
@@ -45,6 +46,8 @@ const Navbar = () => {
     
     // Dispatch custom logout event
     window.dispatchEvent(new CustomEvent("userLogout"));
+    
+    toast.success("Logged out successfully!");
     
     navigate("/");
   };
