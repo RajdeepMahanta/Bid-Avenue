@@ -21,6 +21,10 @@ const ItemSchema = mongoose.Schema({
     type: mongoose.Schema.Types.Date,
     required: true,
   },
+  image: {
+    type: mongoose.Schema.Types.String,
+    required: false,
+  },
   seller: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

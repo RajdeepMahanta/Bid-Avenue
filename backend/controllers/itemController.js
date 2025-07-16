@@ -15,7 +15,7 @@ exports.getAllItems = (req, res) => {
 
 // Create a new item
 exports.createItem = async (req, res) => {
-  const { title, description, startingBid, auctionEndTime } = req.body;
+  const { title, description, startingBid, auctionEndTime, image } = req.body;
 
   try {
     const newItem = new Item({
@@ -24,6 +24,7 @@ exports.createItem = async (req, res) => {
       startingBid,
       currentBid: startingBid,
       auctionEndTime,
+      image,
     });
 
     await newItem.save();
@@ -86,11 +87,11 @@ exports.getItemById = async (req, res) => {
 // Update an item by ID
 exports.updateItem = (req, res) => {
   const itemId = req.params.id;
-  const { title, description, startingBid, auctionEndTime } = req.body;
+  const { title, description, startingBid, auctionEndTime, image } = req.body;
 
   Item.findByIdAndUpdate(
     itemId,
-    { title, description, startingBid, auctionEndTime },
+    { title, description, startingBid, auctionEndTime, image },
     { new: true, runValidators: true }
   )
     .then((item) => {
