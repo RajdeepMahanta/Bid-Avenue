@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/Login.css";
+import "../../styles/Auth.css";
 import axios from "axios";
 
 function Login() {
@@ -28,27 +28,29 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit} className="login-form">
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="login-input"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="login-input"
-        />
-        <input type="submit" value="Login" className="login-button" />
-      </form>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h1>Login</h1>
+        <form onSubmit={handleSubmit} className="auth-form">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="auth-input"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="auth-input"
+          />
+          <input type="submit" value="Login" className="auth-button" />
+        </form>
+      </div>
     </div>
   );
 }

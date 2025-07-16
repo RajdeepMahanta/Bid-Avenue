@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/Register.css";
+import "../../styles/Auth.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -30,35 +30,40 @@ function Register() {
   };
 
   return (
-    <div className="register-container">
-      <h1>Sign Up</h1>
-      {alert.message && (
-        <div className={`alert alert-${alert.type}`}>{alert.message}</div>
-      )}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <input type="submit" value="Sign Up" />
-      </form>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h1>Sign Up</h1>
+        {alert.message && (
+          <div className={`alert alert-${alert.type}`}>{alert.message}</div>
+        )}
+        <form onSubmit={handleSubmit} className="auth-form">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="auth-input"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="auth-input"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="auth-input"
+          />
+          <input type="submit" value="Sign Up" className="auth-button" />
+        </form>
+      </div>
     </div>
   );
 }
