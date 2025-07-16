@@ -62,6 +62,8 @@ const ItemForm = () => {
       image: imageUrl.trim(),
     };
 
+    console.log("Sending item data:", newItem); // Debug log
+
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(`${BASE_URL}/items/createItem`, newItem, {
@@ -71,6 +73,7 @@ const ItemForm = () => {
         },
       });
       console.log("Item created successfully:", res.data);
+      console.log("Response item structure:", res.data);
       navigate("/items");
     } catch (err) {
       console.error("Error creating item:", err);

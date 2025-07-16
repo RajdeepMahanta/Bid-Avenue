@@ -5,6 +5,7 @@ exports.getAllItems = (req, res) => {
   Item.find()
     .then((items) => {
       console.log("Items fetched:", items); // Log fetched items
+      console.log("First item structure:", items[0]); // Log first item structure
       res.json(items);
     })
     .catch((err) => {
@@ -17,6 +18,8 @@ exports.getAllItems = (req, res) => {
 exports.createItem = async (req, res) => {
   const { title, description, startingBid, auctionEndTime, image } = req.body;
 
+  console.log("Received data:", { title, description, startingBid, auctionEndTime, image }); // Debug log
+
   try {
     const newItem = new Item({
       title,
@@ -27,7 +30,10 @@ exports.createItem = async (req, res) => {
       image,
     });
 
+    console.log("Created item object:", newItem); // Debug log
+
     await newItem.save();
+    console.log("Item saved successfully:", newItem); // Debug log
     res.status(201).json(newItem); // Respond with the newly created item
   } catch (err) {
     console.error("Error creating item:", err);

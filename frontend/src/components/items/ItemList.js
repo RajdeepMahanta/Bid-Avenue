@@ -26,6 +26,8 @@ function ItemsList() {
         console.log("Fetching items...");
         const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/items/itemget`);
         console.log("Response received:", res);
+        console.log("Items data:", res.data);
+        console.log("First item structure:", res.data[0]);
         if (res.status === 200) {
           setItems(res.data);
         } else {
