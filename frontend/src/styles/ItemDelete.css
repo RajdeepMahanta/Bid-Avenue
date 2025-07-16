@@ -1,77 +1,51 @@
-.admin-controls {
-  margin-right: auto;
-  margin-left: auto;
-  background-color: #fff;
-  color: #333;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-
-
-/* Admin login section */
-.admin-login {
-  margin-bottom: 20px;
-}
-
-.admin-login input[type="password"] {
-  padding: 10px;
-  width: 200px;
-  margin-right: 10px;
-  font-size: 16px;
-}
-
-.admin-login button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.admin-login button:hover {
-  background-color: #0056b3;
-}
-
-/* Items list styles */
-.items-list2 {
+/* Shared styles for all pages */
+.page-container {
   display: flex;
   flex-direction: column;
-}
-
-/* Admin controls */
-.admin-controls {
-  margin-bottom: 20px;
-}
-
-.admin-controls select {
-  padding: 10px;
-  width: 100%;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-.admin-controls button.delete-button {
-  padding: 10px 20px;
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.admin-controls button.delete-button:hover {
-  background-color: #c82333;
-}
-
-.selected-item-details {
-  border: 2px solid #ccc;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: -20px; /* Counteract the padding from .container */
+  margin-top: -120px; /* Pull the container up to fill the space behind the navbar */
   padding: 20px;
-  margin-top: 20px;
-  background-color: #fff;
-  color: #333;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: #fff;
+  text-align: center;
+}
+
+.page-container h1 {
+  font-size: 3.5em;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.page-container p {
+  font-size: 1.5em;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.home-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.home-button {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #2575fc;
+  padding: 15px 35px;
+  text-decoration: none;
+  border-radius: 50px;
+  margin: 10px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.home-button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }

@@ -1,65 +1,51 @@
+/* Shared styles for all pages */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: -20px; /* Counteract the padding from .container */
+  margin-top: -120px; /* Pull the container up to fill the space behind the navbar */
+  padding: 20px;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: #fff;
+  text-align: center;
+}
 
+.page-container h1 {
+  font-size: 3.5em;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
 
-.items-list {
+.page-container p {
+  font-size: 1.5em;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.home-buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.item {
-  flex: 1 0 300px; /* Create a flexible layout */
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin: 10px;
-  padding: 16px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-  background-color: #fff;
-  color: #333;
-}
-
-.item:hover {
-  transform: translateY(-5px);
-}
-
-.item-image {
-  width: 100%; /* Ensure image takes full width */
-  height: auto; /* Maintain aspect ratio */
-  max-width: 200px; /* Set maximum width */
-  max-height: 200px; /* Set maximum height */
-  min-height: 200px;
-  min-width: 200px;
-  border-radius: 8px;
-  object-fit: contain;
-}
-
-.item h2 {
-  font-size: 1.5em;
-  margin: 10px 0;
-}
-
-.item p {
-  margin: 5px 0;
-}
-
-.place-bid-button {
+.home-button {
   display: inline-block;
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 20px;
+  background-color: #ffffff;
+  color: #2575fc;
+  padding: 15px 35px;
   text-decoration: none;
-  border-radius: 5px;
-  margin-top: 10px;
+  border-radius: 50px;
+  margin: 10px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.place-bid-button:hover {
-  background-color: #0056b3;
-}
-
-.sold-out {
-  background-color: red;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  color: white;
-  font-weight: bold;
+.home-button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }

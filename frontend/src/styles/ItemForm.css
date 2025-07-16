@@ -1,53 +1,51 @@
-
-
-form {
-  background-color: #fff;
-  color: #333;
+/* Shared styles for all pages */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: -20px; /* Counteract the padding from .container */
+  margin-top: -120px; /* Pull the container up to fill the space behind the navbar */
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: #fff;
+  text-align: center;
 }
 
-.item-form-container h2 {
-  font-size: 1.5rem;
+.page-container h1 {
+  font-size: 3.5em;
   margin-bottom: 20px;
+  font-weight: 700;
 }
 
-.item-form-container form {
-  display: grid;
-  grid-gap: 10px;
+.page-container p {
+  font-size: 1.5em;
+  margin-bottom: 40px;
+  font-weight: 300;
 }
 
-.item-form-container label {
-  font-weight: bold;
+.home-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.item-form-container input[type="text"],
-.item-form-container input[type="number"],
-.item-form-container textarea,
-.item-form-container input[type="datetime-local"] {
-  width: 100%;
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+.home-button {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #2575fc;
+  padding: 15px 35px;
+  text-decoration: none;
+  border-radius: 50px;
+  margin: 10px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.item-form-container textarea {
-  resize: vertical; /* Allow vertical resizing of textarea */
-}
-
-.item-form-container button[type="submit"] {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.item-form-container button[type="submit"]:hover {
-  background-color: #0056b3;
+.home-button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }

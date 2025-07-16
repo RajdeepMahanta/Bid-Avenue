@@ -1,44 +1,51 @@
-.login-container {
-  max-width: 400px;
-  margin: 0 auto;
+/* Shared styles for all pages */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: -20px; /* Counteract the padding from .container */
+  margin-top: -120px; /* Pull the container up to fill the space behind the navbar */
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: #fff;
   text-align: center;
 }
 
-.login-container h1 {
+.page-container h1 {
+  font-size: 3.5em;
   margin-bottom: 20px;
-  font-size: 1.8em;
-  color: #333;
+  font-weight: 700;
 }
 
-.login-form {
+.page-container p {
+  font-size: 1.5em;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.home-buttons {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.login-input {
-  margin-bottom: 15px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1em;
+.home-button {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #2575fc;
+  padding: 15px 35px;
+  text-decoration: none;
+  border-radius: 50px;
+  margin: 10px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.login-button {
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.login-button:hover {
-  background-color: #0056b3;
+.home-button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
