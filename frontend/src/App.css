@@ -1,3 +1,9 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4f7f6;
+  color: #333;
+}
+
 .App {
   text-align: center;
 }
@@ -7,13 +13,15 @@
 }
 
 nav {
-  background: #333;
-  color: #fff;
+  background: #ffffff;
+  color: #333;
   padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 nav h1 {
   display: inline;
+  font-weight: 600;
 }
 
 nav ul {
@@ -28,6 +36,7 @@ nav ul li {
 }
 
 nav ul li a {
-  color: #fff;
+  color: #333;
   text-decoration: none;
+  font-weight: 500;
 }

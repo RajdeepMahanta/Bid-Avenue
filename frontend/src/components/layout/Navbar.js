@@ -17,7 +17,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <h1>
-        <Link to="/">Auction System</Link>
+        <Link to="/">Online Auction System</Link>
       </h1>
       <ul>
         {isLoggedIn ? (
