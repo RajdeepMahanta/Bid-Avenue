@@ -43,36 +43,46 @@ function ItemsList() {
   return (
     <div className="page-container">
       <h1>Auction Items</h1>
-      <div className="items-list">
+      <div className="items-grid">
         {items.map((item) => {
           const isAuctionEnded = new Date(item.auctionEndTime) < new Date();
           return (
-            <div key={item._id} className="item">
-              <img src={item.image} alt={item.title} className="item-image" />
-              <h2>{item.title}</h2>
-              <p>{item.description}</p>
-              <p>Base Bid: ${item.startingBid}</p>
-              <p>Current Bid: ${item.currentBid}</p>
-              {!isAuctionEnded && (
-                <div>
-                  <p>
-                    <p>Bidding ends at: {formatDate(item.auctionEndTime)}</p>
-                  </p>
-                  <Link
-                    to={`/bidding/${item._id}`}
-                    className="place-bid-button"
-                  >
-                    Place Bid
-                  </Link>
+            <div key={item._id} className="item-card">
+              <div className="item-image-container">
+                <img src={item.image} alt={item.title} className="item-image" />
+                {isAuctionEnded && <div className="sold-overlay">SOLD OUT</div>}
+              </div>
+              <div className="item-content">
+                <h3 className="item-title">{item.title}</h3>
+                <p className="item-description">{item.description}</p>
+                <div className="item-pricing">
+                  <p className="base-bid">Base Bid: <span>${item.startingBid}</span></p>
+                  <p className="current-bid">Current Bid: <span>${item.currentBid}</span></p>
                 </div>
-              )}
-              {isAuctionEnded && (
-                <div>
-                  {" "}
-                  <p>Bidding ended at: {formatDate(item.auctionEndTime)}</p>
-                  <p className="sold-out">Sold Out</p>
+                <div className="item-footer">
+                  {!isAuctionEnded && (
+                    <>
+                      <p className="auction-time">
+                        Ends: {formatDate(item.auctionEndTime)}
+                      </p>
+                      <Link
+                        to={`/bidding/${item._id}`}
+                        className="place-bid-button"
+                      >
+                        Place Bid
+                      </Link>
+                    </>
+                  )}
+                  {isAuctionEnded && (
+                    <>
+                      <p className="auction-time ended">
+                        Ended: {formatDate(item.auctionEndTime)}
+                      </p>
+                      <div className="sold-out-badge">Auction Ended</div>
+                    </>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           );
         })}
