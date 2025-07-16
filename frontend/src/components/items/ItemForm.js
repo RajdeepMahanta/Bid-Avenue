@@ -11,7 +11,7 @@ const ItemForm = () => {
   const [description, setDescription] = useState("");
   const [startingBid, setStartingBid] = useState("");
   const [auctionEndTime, setAuctionEndTime] = useState("");
-  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -23,12 +23,27 @@ const ItemForm = () => {
     if (!description.trim()) newErrors.description = "Description is required";
     if (!startingBid || startingBid <= 0) newErrors.startingBid = "Starting bid must be greater than 0";
     if (!auctionEndTime) newErrors.auctionEndTime = "Auction end time is required";
+    if (!imageUrl.trim()) newErrors.imageUrl = "Image URL is required";
+    
+    // Basic URL validation
+    if (imageUrl.trim() && !isValidUrl(imageUrl.trim())) {
+      newErrors.imageUrl = "Please enter a valid image URL";
+    }
     
     const endTime = new Date(auctionEndTime);
     if (endTime <= new Date()) newErrors.auctionEndTime = "Auction end time must be in the future";
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const isValidUrl = (string) => {
+    try {
+      new URL(string);
+      return true;
+    } catch (_) {
+      return false;
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -44,6 +59,7 @@ const ItemForm = () => {
       description: description.trim(),
       startingBid: parseFloat(startingBid),
       auctionEndTime: new Date(auctionEndTime).toISOString(),
+      image: imageUrl.trim(),
     };
 
     try {
@@ -97,6 +113,34 @@ const ItemForm = () => {
               disabled={isLoading}
             />
             {errors.description && <span className="error-text">{errors.description}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="imageUrl">Image URL *</label>
+            <input
+              id="imageUrl"
+              type="url"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              className={errors.imageUrl ? "error" : ""}
+              placeholder="https://example.com/image.jpg"
+              disabled={isLoading}
+            />
+            {errors.imageUrl && <span className="error-text">{errors.imageUrl}</span>}
+            {imageUrl && (
+              <div className="image-preview">
+                <img 
+                  src={imageUrl} 
+                  alt="Preview" 
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                  onLoad={(e) => {
+                    e.target.style.display = 'block';
+                  }}
+                />
+              </div>
+            )}
           </div>
 
           <div className="form-row">

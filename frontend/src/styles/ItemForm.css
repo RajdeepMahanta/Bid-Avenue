@@ -145,6 +145,22 @@
   min-height: 100px;
 }
 
+.image-preview {
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 200px;
+  max-height: 150px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
 .error-text {
   color: #ff6b6b;
   font-size: 0.85rem;

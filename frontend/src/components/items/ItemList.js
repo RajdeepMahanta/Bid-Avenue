@@ -49,7 +49,14 @@ function ItemsList() {
           return (
             <div key={item._id} className="item-card">
               <div className="item-image-container">
-                <img src={item.image} alt={item.title} className="item-image" />
+                <img 
+                  src={item.image} 
+                  alt={item.title} 
+                  className="item-image"
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/400x200/cccccc/666666?text=No+Image";
+                  }}
+                />
                 {isAuctionEnded && <div className="sold-overlay">SOLD OUT</div>}
               </div>
               <div className="item-content">
