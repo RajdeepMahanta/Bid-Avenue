@@ -7,16 +7,21 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true"
   );
+  const [forceUpdate, setForceUpdate] = useState(0);
   const navigate = useNavigate();
 
   // Listen for storage changes to update navbar state
   useEffect(() => {
     const handleStorageChange = () => {
-      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+      const currentLoginStatus = localStorage.getItem("isLoggedIn") === "true";
+      setIsLoggedIn(currentLoginStatus);
+      // Force component re-render
+      setForceUpdate(prev => prev + 1);
     };
 
     const handleLogoutEvent = () => {
       setIsLoggedIn(false);
+      setForceUpdate(prev => prev + 1);
     };
 
     // Listen for storage events (cross-tab changes)
@@ -25,8 +30,8 @@ const Navbar = () => {
     // Listen for custom logout event
     window.addEventListener("userLogout", handleLogoutEvent);
 
-    // Also check periodically for same-tab changes
-    const interval = setInterval(handleStorageChange, 1000);
+    // Check more frequently for same-tab changes (every 500ms instead of 1000ms)
+    const interval = setInterval(handleStorageChange, 500);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
@@ -42,6 +47,7 @@ const Navbar = () => {
     localStorage.removeItem("adminSession");
     localStorage.removeItem("adminSessionExpiry");
     
+    // Immediately update the state
     setIsLoggedIn(false);
     
     // Dispatch custom logout event
@@ -49,7 +55,10 @@ const Navbar = () => {
     
     toast.success("Logged out successfully!");
     
-    navigate("/");
+    // Force a small delay to ensure state is updated before navigation
+    setTimeout(() => {
+      navigate("/");
+    }, 100);
   };
 
   return (
