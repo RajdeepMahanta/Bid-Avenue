@@ -14,21 +14,44 @@ import HomePage from "./components/layout/HomePage";
 
 const App = () => {
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Clear login session when browser/tab is closed
-      localStorage.setItem("isLoggedIn", "false");
-      
-      // Also clear admin session if it exists
-      localStorage.removeItem("adminSession");
-      localStorage.removeItem("adminSessionExpiry");
+    // Create a heartbeat mechanism
+    let heartbeatInterval;
+    
+    const startHeartbeat = () => {
+      // Update timestamp every 5 seconds while app is active
+      heartbeatInterval = setInterval(() => {
+        localStorage.setItem("lastActivity", Date.now().toString());
+      }, 5000);
     };
 
-    // Add event listener for beforeunload (browser/tab close)
-    window.addEventListener("beforeunload", handleBeforeUnload);
+    const checkForInactiveSession = () => {
+      const lastActivity = localStorage.getItem("lastActivity");
+      if (lastActivity) {
+        const timeSinceLastActivity = Date.now() - parseInt(lastActivity);
+        // If more than 15 seconds without activity, consider browser closed
+        if (timeSinceLastActivity > 15000) {
+          localStorage.setItem("isLoggedIn", "false");
+          localStorage.removeItem("adminSession");
+          localStorage.removeItem("adminSessionExpiry");
+          localStorage.removeItem("lastActivity");
+        }
+      }
+    };
 
-    // Cleanup event listener on component unmount
+    // Check for inactive sessions when app starts
+    checkForInactiveSession();
+    
+    // Start the heartbeat
+    startHeartbeat();
+    
+    // Set initial activity timestamp
+    localStorage.setItem("lastActivity", Date.now().toString());
+
+    // Cleanup on unmount
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (heartbeatInterval) {
+        clearInterval(heartbeatInterval);
+      }
     };
   }, []);
 
