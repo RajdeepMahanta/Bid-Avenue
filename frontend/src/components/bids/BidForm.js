@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import "../../styles/BiddingPage.css";
 import "../../styles/Shared.css";
 
@@ -109,13 +110,13 @@ function BiddingPage() {
 
     // Check if auction has ended before processing bid
     if (checkAuctionStatus(item.auctionEndTime)) {
-      setError("This auction has ended. No more bids can be placed.");
+      toast.warning("This auction has ended. No more bids can be placed.");
       setIsAuctionEnded(true);
       return;
     }
 
     if (parseFloat(bidAmount) <= parseFloat(item.currentBid)) {
-      setError("Bid amount must be higher than the current bid.");
+      toast.error("Bid amount must be higher than the current bid.");
       return;
     }
 
@@ -140,7 +141,7 @@ function BiddingPage() {
           currentBidder: currentBidder.trim()
         }));
         
-        alert(`Bid of $${bidAmount} placed successfully!`);
+        toast.success(`Bid of $${bidAmount} placed successfully!`);
         setBidAmount(""); // Clear bid amount after successful bid
       } else {
         throw new Error("Failed to place bid");

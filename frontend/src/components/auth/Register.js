@@ -3,12 +3,12 @@ import "../../styles/Auth.css";
 import "../../styles/Shared.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [alert, setAlert] = useState({ message: "", type: "" });
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -19,14 +19,14 @@ function Register() {
     try {
       const res = await axios.post(url, inputObj);
       if (res.status === 200) {
-        setAlert({ message: "User Created Successfully" });
+        toast.success("User Created Successfully!");
         navigate("/login");
       } else {
-        setAlert({ message: "Failed to create user" });
+        toast.error("Failed to create user");
       }
     } catch (err) {
       console.log(err);
-      setAlert({ message: "An error occurred" });
+      toast.error("An error occurred");
     }
   };
 
@@ -34,9 +34,6 @@ function Register() {
     <div className="page-container">
       <div className="auth-card">
         <h1>Sign Up</h1>
-        {alert.message && (
-          <div className={`alert alert-${alert.type}`}>{alert.message}</div>
-        )}
         <form onSubmit={handleSubmit} className="auth-form">
           <input
             type="text"

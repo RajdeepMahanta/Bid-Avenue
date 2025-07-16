@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../styles/Auth.css";
 import "../../styles/Shared.css";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -16,7 +17,7 @@ function Login() {
     try {
       const res = await axios.post(url, inputObj);
       if (res.status === 200) {
-        alert("Login Successful");
+        toast.success("Login Successful!");
         localStorage.setItem("isLoggedIn", "true");
         window.location.href = "/";
       } else {
@@ -24,7 +25,7 @@ function Login() {
       }
     } catch (err) {
       console.error(err);
-      alert("Login Failed");
+      toast.error("Login Failed");
     }
   };
 

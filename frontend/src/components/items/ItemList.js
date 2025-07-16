@@ -3,6 +3,7 @@ import "../../styles/ItemList.css";
 import "../../styles/Shared.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 function ItemsList() {
   const [items, setItems] = useState([]);
@@ -67,7 +68,7 @@ function ItemsList() {
         }
       } catch (err) {
         console.error(err);
-        alert("Failed to fetch items");
+        toast.error("Failed to fetch items");
       }
     };
 

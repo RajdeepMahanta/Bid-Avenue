@@ -3,6 +3,7 @@ import "../../styles/ItemDelete.css";
 import "../../styles/Shared.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -71,7 +72,7 @@ function ItemDelete() {
 
         if (timeLeft <= 0) {
           handleAdminLogout();
-          setError("Admin session expired. Please login again.");
+          toast.warning("Admin session expired. Please login again.");
         } else {
           const minutes = Math.floor(timeLeft / (1000 * 60));
           const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
@@ -158,7 +159,7 @@ function ItemDelete() {
       );
 
       if (res.status === 200) {
-        alert("Item deleted successfully");
+        toast.success("Item deleted successfully!");
         fetchItems(); // Refresh items list after deletion
         setSelectedItemDetails(null); // Clear selected item details after deletion
         setSelectedItemId("");
@@ -197,6 +198,8 @@ function ItemDelete() {
       
       // Clear the password input for security
       setAdminPasscode("");
+      
+      toast.success("Admin access granted!");
     } else {
       setError("Incorrect admin passcode. Please try again.");
     }
