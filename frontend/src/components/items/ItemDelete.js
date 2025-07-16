@@ -11,6 +11,22 @@ function ItemDelete() {
   const [adminPasscode, setAdminPasscode] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [selectedItemDetails, setSelectedItemDetails] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const formatDate = (dateString) => {
+    const options = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Kolkata",
+    };
+    return new Date(dateString).toLocaleString("en-IN", options);
+  };
 
   useEffect(() => {
     fetchItems();
@@ -26,7 +42,7 @@ function ItemDelete() {
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to fetch items");
+      setError("Failed to fetch items. Please try again.");
     }
   };
 
@@ -40,11 +56,18 @@ function ItemDelete() {
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to fetch item details");
+      setError("Failed to fetch item details. Please try again.");
     }
   };
 
   const handleDelete = async () => {
+    if (!window.confirm(`Are you sure you want to delete "${selectedItemDetails?.title}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsDeleting(true);
+    setError("");
+
     try {
       const res = await axios.delete(
         `${BASE_URL}/items/${selectedItemId}`,
@@ -59,12 +82,15 @@ function ItemDelete() {
         alert("Item deleted successfully");
         fetchItems(); // Refresh items list after deletion
         setSelectedItemDetails(null); // Clear selected item details after deletion
+        setSelectedItemId("");
       } else {
         throw new Error("Failed to delete item");
       }
     } catch (err) {
       console.error("Error deleting item:", err);
-      alert("Failed to delete item");
+      setError("Failed to delete item. Please try again.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -74,62 +100,124 @@ function ItemDelete() {
   };
 
   const handleAdminLogin = () => {
+    setError("");
     if (adminPasscode === "adminaccess123") {
       setIsAdmin(true);
     } else {
-      alert("Incorrect admin passcode");
+      setError("Incorrect admin passcode. Please try again.");
     }
   };
 
   return (
     <div className="page-container">
-      <h1>Delete an Item</h1>
+      <h1>Delete Item</h1>
+      
       {!isAdmin && (
-        <div className="admin-login">
-          <input
-            type="password"
-            placeholder="Admin Passcode"
-            value={adminPasscode}
-            onChange={(e) => setAdminPasscode(e.target.value)}
-          />
-          <button onClick={handleAdminLogin}>Login</button>
+        <div className="admin-login-container">
+          <div className="admin-login-card">
+            <h3>Admin Access Required</h3>
+            <p>Please enter the admin passcode to access item deletion.</p>
+            {error && <div className="error-message">{error}</div>}
+            
+            <div className="form-group">
+              <label htmlFor="adminPasscode">Admin Passcode</label>
+              <input
+                type="password"
+                id="adminPasscode"
+                placeholder="Enter admin passcode"
+                value={adminPasscode}
+                onChange={(e) => setAdminPasscode(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleAdminLogin()}
+              />
+            </div>
+            
+            <button 
+              onClick={handleAdminLogin}
+              className="btn-submit"
+              disabled={!adminPasscode.trim()}
+            >
+              Login as Admin
+            </button>
+          </div>
         </div>
       )}
+
       {isAdmin && (
-        <div className="items-list2">
-          <div className="admin-controls">
-            <select
-              onChange={(e) => handleSelectItem(e.target.value)}
-              defaultValue=""
-            >
-              <option value="" disabled>
-                Select item to delete
-              </option>
-              {items.map((item) => (
-                <option key={item._id} value={item._id}>
-                  {item.title}
+        <div className="delete-container">
+          <div className="item-selector-card">
+            <h3>Select Item to Delete</h3>
+            {error && <div className="error-message">{error}</div>}
+            
+            <div className="form-group">
+              <label htmlFor="itemSelect">Choose an item:</label>
+              <select
+                id="itemSelect"
+                onChange={(e) => handleSelectItem(e.target.value)}
+                value={selectedItemId}
+                className="item-select"
+              >
+                <option value="" disabled>
+                  Select item to delete
                 </option>
-              ))}
-            </select>
-            <br />
-            {selectedItemDetails && (
-              <div className="selected-item-details">
-                <br />
+                {items.map((item) => (
+                  <option key={item._id} value={item._id}>
+                    {item.title} - ${item.currentBid}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {selectedItemDetails && (
+            <div className="selected-item-card">
+              <div className="item-image-container">
                 <img
                   src={selectedItemDetails.image}
                   alt={selectedItemDetails.title}
                   className="item-image"
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/400x200/cccccc/666666?text=No+Image";
+                  }}
                 />
-                <h2>{selectedItemDetails.title}</h2>
-                <p>{selectedItemDetails.description}</p>
-                <p>Base Bid: ${selectedItemDetails.startingBid}</p>
-                <p>Current Bid: ${selectedItemDetails.currentBid}</p>
-                <button onClick={handleDelete} className="delete-button">
-                  Delete Item
+              </div>
+              
+              <div className="item-content">
+                <h2 className="item-title">{selectedItemDetails.title}</h2>
+                <p className="item-description">{selectedItemDetails.description}</p>
+                
+                <div className="item-pricing">
+                  <p className="base-bid">Base Bid: <span>${selectedItemDetails.startingBid}</span></p>
+                  <p className="current-bid">Current Bid: <span>${selectedItemDetails.currentBid}</span></p>
+                </div>
+                
+                <div className="item-footer">
+                  <p className="auction-time">
+                    Ends: {formatDate(selectedItemDetails.auctionEndTime)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="delete-actions">
+                <button 
+                  onClick={handleDelete} 
+                  className="btn-delete"
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? "Deleting..." : "Delete Item"}
+                </button>
+                <button 
+                  onClick={() => {
+                    setSelectedItemDetails(null);
+                    setSelectedItemId("");
+                  }}
+                  className="btn-cancel"
+                  disabled={isDeleting}
+                >
+                  Cancel
                 </button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>
