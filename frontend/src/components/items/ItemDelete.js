@@ -37,6 +37,18 @@ function ItemDelete() {
   useEffect(() => {
     fetchItems();
     checkAdminSession();
+    
+    // Listen for logout events to update local state
+    const handleLogoutEvent = () => {
+      setIsLoggedIn(false);
+      setIsAdmin(false);
+    };
+    
+    window.addEventListener("userLogout", handleLogoutEvent);
+    
+    return () => {
+      window.removeEventListener("userLogout", handleLogoutEvent);
+    };
   }, []);
 
   // Timer to check session expiry and update remaining time
@@ -198,6 +210,9 @@ function ItemDelete() {
     // Clear main user session
     localStorage.setItem("isLoggedIn", "false");
     
+    // Dispatch custom logout event to update navbar
+    window.dispatchEvent(new CustomEvent("userLogout"));
+    
     // Navigate to home page
     navigate("/");
   };
@@ -263,7 +278,7 @@ function ItemDelete() {
                 onClick={handleAdminLogout}
                 className="btn-logout"
               >
-                Logout from Website
+                Logout
               </button>
             </div>
           </div>

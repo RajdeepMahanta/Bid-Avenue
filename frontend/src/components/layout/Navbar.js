@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/Navbar.css";
 
@@ -8,6 +8,32 @@ const Navbar = () => {
   );
   const navigate = useNavigate();
 
+  // Listen for storage changes to update navbar state
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+    };
+
+    const handleLogoutEvent = () => {
+      setIsLoggedIn(false);
+    };
+
+    // Listen for storage events (cross-tab changes)
+    window.addEventListener("storage", handleStorageChange);
+    
+    // Listen for custom logout event
+    window.addEventListener("userLogout", handleLogoutEvent);
+
+    // Also check periodically for same-tab changes
+    const interval = setInterval(handleStorageChange, 1000);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("userLogout", handleLogoutEvent);
+      clearInterval(interval);
+    };
+  }, []);
+
   const handleLogout = () => {
     localStorage.setItem("isLoggedIn", "false");
     
@@ -16,6 +42,10 @@ const Navbar = () => {
     localStorage.removeItem("adminSessionExpiry");
     
     setIsLoggedIn(false);
+    
+    // Dispatch custom logout event
+    window.dispatchEvent(new CustomEvent("userLogout"));
+    
     navigate("/");
   };
 
