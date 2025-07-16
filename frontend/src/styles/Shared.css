@@ -1,0 +1,26 @@
+/* Shared styles for all pages */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: -20px; /* Counteract the padding from .container */
+  margin-top: -120px; /* Pull the container up to fill the space behind the navbar */
+  padding: 20px;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: #fff;
+  text-align: center;
+}
+
+.page-container h1 {
+  font-size: 3.5em;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.page-container p {
+  font-size: 1.5em;
+  margin-bottom: 40px;
+  font-weight: 300;
+}

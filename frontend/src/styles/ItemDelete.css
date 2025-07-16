@@ -1,13 +1,14 @@
 .admin-controls {
   margin-right: auto;
   margin-left: auto;
+  background-color: #fff;
+  color: #333;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.items-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
+
 
 /* Admin login section */
 .admin-login {
@@ -69,4 +70,8 @@
   border: 2px solid #ccc;
   padding: 20px;
   margin-top: 20px;
+  background-color: #fff;
+  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

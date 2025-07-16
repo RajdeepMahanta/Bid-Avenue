@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../../styles/ItemForm.css";
+import "../../styles/Shared.css";
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -37,7 +38,7 @@ const ItemForm = () => {
 
 
   return (
-    <div className="item-form-container">
+    <div className="page-container">
       <h2>Add New Item</h2>
       <form onSubmit={handleSubmit}>
         <label>Title:</label>

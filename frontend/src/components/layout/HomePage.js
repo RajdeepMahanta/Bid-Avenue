@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/HomePage.css";
+import "../../styles/Shared.css";
 
 const HomePage = () => {
   const [isLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
 
   return (
-    <div className="home-container">
+    <div className="page-container">
       <h1>Welcome to Bid Avenue</h1>
       <p>Your one-stop destination for online auctions</p>
       <div className="home-buttons">

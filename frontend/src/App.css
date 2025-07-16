@@ -12,3 +12,9 @@ body {
   padding: 20px;
   padding-top: 120px; /* Add padding to offset the fixed navbar */
 }
+
+.gradient-background {
+  min-height: 100vh;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: #fff;
+}

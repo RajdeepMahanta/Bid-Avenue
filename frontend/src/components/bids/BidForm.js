@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "../../styles/BiddingPage.css";
+import "../../styles/Shared.css";
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -49,7 +50,7 @@ function BiddingPage() {
       });
 
       if (res.status === 200) {
-        alert(`Bid of $${bidAmount} placed successfully!`);
+        alert(`Bid of ${bidAmount} placed successfully!`);
         navigate("/items");
       } else {
         throw new Error("Failed to place bid");
@@ -61,15 +62,15 @@ function BiddingPage() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="page-container">Loading...</div>;
   }
 
   if (!item) {
-    return <div>Error: Item not found</div>;
+    return <div className="page-container">Error: Item not found</div>;
   }
 
   return (
-    <div>
+    <div className="page-container">
       <div className="bidding-page">
         <div className="item-details">
           <h1>{item.title}</h1>

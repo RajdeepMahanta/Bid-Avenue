@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/ItemList.css";
+import "../../styles/Shared.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -40,7 +41,7 @@ function ItemsList() {
   }, []);
 
   return (
-    <div>
+    <div className="page-container">
       <h1>Auction Items</h1>
       <div className="items-list">
         {items.map((item) => {

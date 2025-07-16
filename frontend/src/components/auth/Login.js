@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/Auth.css";
+import "../../styles/Shared.css";
 import axios from "axios";
 
 function Login() {
@@ -28,7 +29,7 @@ function Login() {
   };
 
   return (
-    <div className="auth-container">
+    <div className="page-container">
       <div className="auth-card">
         <h1>Login</h1>
         <form onSubmit={handleSubmit} className="auth-form">

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/ItemDelete.css";
+import "../../styles/Shared.css";
 import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
@@ -81,7 +82,7 @@ function ItemDelete() {
   };
 
   return (
-    <div className="items-container">
+    <div className="page-container">
       <h1>Delete an Item</h1>
       {!isAdmin && (
         <div className="admin-login">

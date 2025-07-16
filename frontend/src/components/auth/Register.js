@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/Auth.css";
+import "../../styles/Shared.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -30,7 +31,7 @@ function Register() {
   };
 
   return (
-    <div className="auth-container">
+    <div className="page-container">
       <div className="auth-card">
         <h1>Sign Up</h1>
         {alert.message && (
