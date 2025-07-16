@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 function ItemsList() {
   const [items, setItems] = useState([]);
+  const [timeRemaining, setTimeRemaining] = useState({});
 
   const formatDate = (dateString) => {
     const options = {
@@ -18,6 +19,37 @@ function ItemsList() {
       timeZone: "Asia/Kolkata",
     };
     return new Date(dateString).toLocaleString("en-IN", options);
+  };
+
+  const checkAuctionStatus = (auctionEndTime) => {
+    const now = new Date();
+    const endTime = new Date(auctionEndTime);
+    return endTime <= now;
+  };
+
+  const calculateTimeRemaining = (auctionEndTime) => {
+    const now = new Date();
+    const endTime = new Date(auctionEndTime);
+    const difference = endTime - now;
+
+    if (difference <= 0) {
+      return "Auction Ended";
+    }
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    if (days > 0) {
+      return `${days}d ${hours}h ${minutes}m`;
+    } else if (hours > 0) {
+      return `${hours}h ${minutes}m ${seconds}s`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${seconds}s`;
+    } else {
+      return `${seconds}s`;
+    }
   };
 
   useEffect(() => {
@@ -42,12 +74,29 @@ function ItemsList() {
     fetchItems();
   }, []);
 
+  // Timer effect to update time remaining for all items
+  useEffect(() => {
+    if (items.length === 0) return;
+
+    const timer = setInterval(() => {
+      const newTimeRemaining = {};
+      items.forEach(item => {
+        newTimeRemaining[item._id] = calculateTimeRemaining(item.auctionEndTime);
+      });
+      setTimeRemaining(newTimeRemaining);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [items]);
+
   return (
     <div className="page-container">
       <h1>Auction Items</h1>
       <div className="items-grid">
         {items.map((item) => {
-          const isAuctionEnded = new Date(item.auctionEndTime) < new Date();
+          const isAuctionEnded = checkAuctionStatus(item.auctionEndTime);
+          const itemTimeRemaining = timeRemaining[item._id] || calculateTimeRemaining(item.auctionEndTime);
+          
           return (
             <div key={item._id} className="item-card">
               <div className="item-image-container">
@@ -74,6 +123,9 @@ function ItemsList() {
                       <p className="auction-time">
                         Ends: {formatDate(item.auctionEndTime)}
                       </p>
+                      <p className="time-remaining">
+                        {itemTimeRemaining}
+                      </p>
                       <Link
                         to={`/bidding/${item._id}`}
                         className="place-bid-button"
@@ -87,7 +139,14 @@ function ItemsList() {
                       <p className="auction-time ended">
                         Ended: {formatDate(item.auctionEndTime)}
                       </p>
-                      <div className="sold-out-badge">Auction Ended</div>
+                      <div className="sold-out-badge">
+                        Auction Ended
+                        {item.currentBidder && (
+                          <div className="winner-info">
+                            Winner: {item.currentBidder}
+                          </div>
+                        )}
+                      </div>
                     </>
                   )}
                 </div>

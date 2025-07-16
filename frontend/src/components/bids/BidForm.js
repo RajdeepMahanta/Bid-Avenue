@@ -14,6 +14,8 @@ function BiddingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAuctionEnded, setIsAuctionEnded] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState("");
   const navigate = useNavigate();
 
   const formatDate = (dateString) => {
@@ -29,6 +31,37 @@ function BiddingPage() {
     return new Date(dateString).toLocaleString("en-IN", options);
   };
 
+  const checkAuctionStatus = (auctionEndTime) => {
+    const now = new Date();
+    const endTime = new Date(auctionEndTime);
+    return endTime <= now;
+  };
+
+  const calculateTimeRemaining = (auctionEndTime) => {
+    const now = new Date();
+    const endTime = new Date(auctionEndTime);
+    const difference = endTime - now;
+
+    if (difference <= 0) {
+      return "Auction Ended";
+    }
+
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    if (days > 0) {
+      return `${days}d ${hours}h ${minutes}m remaining`;
+    } else if (hours > 0) {
+      return `${hours}h ${minutes}m ${seconds}s remaining`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${seconds}s remaining`;
+    } else {
+      return `${seconds}s remaining`;
+    }
+  };
+
   useEffect(() => {
     const fetchItem = async () => {
       try {
@@ -36,6 +69,7 @@ function BiddingPage() {
         if (res.status === 200) {
           setItem(res.data);
           setCurrentBidder(res.data.currentBidder || "");
+          setIsAuctionEnded(checkAuctionStatus(res.data.auctionEndTime));
         } else {
           throw new Error("Failed to fetch item details");
         }
@@ -50,9 +84,35 @@ function BiddingPage() {
     fetchItem();
   }, [itemId]);
 
+  // Timer effect to update time remaining and check auction status
+  useEffect(() => {
+    if (!item) return;
+
+    const timer = setInterval(() => {
+      const auctionEnded = checkAuctionStatus(item.auctionEndTime);
+      const remaining = calculateTimeRemaining(item.auctionEndTime);
+      
+      setIsAuctionEnded(auctionEnded);
+      setTimeRemaining(remaining);
+      
+      if (auctionEnded) {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [item]);
+
   const handleBidSubmit = async (event) => {
     event.preventDefault();
     setError("");
+
+    // Check if auction has ended before processing bid
+    if (checkAuctionStatus(item.auctionEndTime)) {
+      setError("This auction has ended. No more bids can be placed.");
+      setIsAuctionEnded(true);
+      return;
+    }
 
     if (parseFloat(bidAmount) <= parseFloat(item.currentBid)) {
       setError("Bid amount must be higher than the current bid.");
@@ -73,14 +133,26 @@ function BiddingPage() {
       });
 
       if (res.status === 200) {
+        // Update the item with new bid data
+        setItem(prevItem => ({
+          ...prevItem,
+          currentBid: bidAmount,
+          currentBidder: currentBidder.trim()
+        }));
+        
         alert(`Bid of $${bidAmount} placed successfully!`);
-        navigate("/items");
+        setBidAmount(""); // Clear bid amount after successful bid
       } else {
         throw new Error("Failed to place bid");
       }
     } catch (err) {
       console.error(err);
-      setError("Failed to place bid. Please try again.");
+      if (err.response?.status === 400 && err.response?.data?.message?.includes("ended")) {
+        setError("This auction has ended. No more bids can be placed.");
+        setIsAuctionEnded(true);
+      } else {
+        setError("Failed to place bid. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -123,6 +195,7 @@ function BiddingPage() {
                 e.target.src = "https://via.placeholder.com/400x200/cccccc/666666?text=No+Image";
               }}
             />
+            {isAuctionEnded && <div className="sold-overlay">SOLD OUT</div>}
           </div>
           
           <div className="item-content">
@@ -136,16 +209,43 @@ function BiddingPage() {
             
             <div className="item-footer">
               <p className="auction-time">
-                Ends: {formatDate(item.auctionEndTime)}
+                {isAuctionEnded ? (
+                  <span className="ended">Ended: {formatDate(item.auctionEndTime)}</span>
+                ) : (
+                  <>
+                    <span>Ends: {formatDate(item.auctionEndTime)}</span>
+                    <br />
+                    <span className="time-remaining">{timeRemaining}</span>
+                  </>
+                )}
               </p>
             </div>
           </div>
         </div>
 
         <div className="bid-form-card">
-          <h3>Place Your Bid</h3>
+          <h3>{isAuctionEnded ? "Auction Ended" : "Place Your Bid"}</h3>
           {error && <div className="error-message">{error}</div>}
-          <form onSubmit={handleBidSubmit} className="bid-form">
+          
+          {isAuctionEnded ? (
+            <div className="auction-ended-message">
+              <div className="sold-out-badge">
+                <h4>This auction has ended</h4>
+                <p>Final winning bid: <strong>${item.currentBid}</strong></p>
+                {item.currentBidder && <p>Winner: <strong>{item.currentBidder}</strong></p>}
+              </div>
+              <div className="form-actions">
+                <button 
+                  type="button" 
+                  className="btn-submit"
+                  onClick={() => navigate("/items")}
+                >
+                  Back to Items
+                </button>
+              </div>
+            </div>
+          ) : (
+            <form onSubmit={handleBidSubmit} className="bid-form">
             <div className="form-group">
               <label htmlFor="bidAmount">Bid Amount ($)</label>
               <input
@@ -187,6 +287,7 @@ function BiddingPage() {
               </button>
             </div>
           </form>
+          )}
         </div>
       </div>
     </div>

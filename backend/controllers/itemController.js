@@ -52,6 +52,17 @@ exports.biddingUpdate = async (req, res) => {
       return res.status(404).json({ message: "Item not found" });
     }
 
+    // Check if auction has ended
+    const now = new Date();
+    const auctionEndTime = new Date(item.auctionEndTime);
+    
+    if (now >= auctionEndTime) {
+      return res.status(400).json({ 
+        message: "This auction has ended. No more bids can be placed.",
+        auctionEnded: true 
+      });
+    }
+
     // Validate the new bid amount
     if (parseFloat(amount) <= parseFloat(item.currentBid)) {
       return res
