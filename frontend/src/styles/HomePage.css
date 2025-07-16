@@ -5,6 +5,7 @@
   align-items: center;
   min-height: 100vh;
   margin: -20px; /* Counteract the padding from .container */
+  margin-top: -120px; /* Pull the container up to fill the space behind the navbar */
   padding: 20px;
   background: linear-gradient(to right, #6a11cb, #2575fc);
   color: #fff;

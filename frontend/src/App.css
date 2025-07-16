@@ -10,4 +10,5 @@ body {
 
 .container {
   padding: 20px;
+  padding-top: 120px; /* Add padding to offset the fixed navbar */
 }
