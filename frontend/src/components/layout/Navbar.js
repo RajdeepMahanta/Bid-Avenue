@@ -76,10 +76,14 @@ const Navbar = () => {
           ) : (
             <>
               <li>
-                <Link to="/login">Login</Link>
+                <button onClick={() => navigate("/login")} className="login-button">
+                  Login
+                </button>
               </li>
               <li>
-                <Link to="/register">Register</Link>
+                <button onClick={() => navigate("/register")} className="logout-button">
+                  Register
+                </button>
               </li>
             </>
           )}
