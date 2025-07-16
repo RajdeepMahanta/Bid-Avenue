@@ -10,6 +10,11 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.setItem("isLoggedIn", "false");
+    
+    // Also clear admin session if it exists
+    localStorage.removeItem("adminSession");
+    localStorage.removeItem("adminSessionExpiry");
+    
     setIsLoggedIn(false);
     navigate("/");
   };

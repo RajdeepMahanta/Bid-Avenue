@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../styles/ItemDelete.css";
 import "../../styles/Shared.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -15,6 +16,10 @@ function ItemDelete() {
   const [error, setError] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [sessionTimeRemaining, setSessionTimeRemaining] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") === "true"
+  );
+  const navigate = useNavigate();
 
   const formatDate = (dateString) => {
     const options = {
@@ -39,6 +44,13 @@ function ItemDelete() {
     if (!isAdmin) return;
 
     const timer = setInterval(() => {
+      // Check if main login is still valid
+      const mainLoginStatus = localStorage.getItem("isLoggedIn") === "true";
+      if (!mainLoginStatus) {
+        handleAdminLogout();
+        return;
+      }
+
       const sessionExpiry = localStorage.getItem("adminSessionExpiry");
       if (sessionExpiry) {
         const now = new Date().getTime();
@@ -60,6 +72,15 @@ function ItemDelete() {
   }, [isAdmin]);
 
   const checkAdminSession = () => {
+    // First check if user is logged into the main website
+    const mainLoginStatus = localStorage.getItem("isLoggedIn") === "true";
+    if (!mainLoginStatus) {
+      setIsAdmin(false);
+      localStorage.removeItem("adminSession");
+      localStorage.removeItem("adminSessionExpiry");
+      return;
+    }
+
     const adminSession = localStorage.getItem("adminSession");
     const sessionExpiry = localStorage.getItem("adminSessionExpiry");
     
@@ -147,6 +168,13 @@ function ItemDelete() {
 
   const handleAdminLogin = () => {
     setError("");
+    
+    // Check if user is logged into main website first
+    if (!isLoggedIn) {
+      setError("Please login to the website first to access admin features.");
+      return;
+    }
+    
     if (adminPasscode === "adminaccess123") {
       setIsAdmin(true);
       
@@ -163,20 +191,37 @@ function ItemDelete() {
   };
 
   const handleAdminLogout = () => {
-    setIsAdmin(false);
-    setAdminPasscode("");
-    setSelectedItemDetails(null);
-    setSelectedItemId("");
-    setError("");
+    // Clear admin session
     localStorage.removeItem("adminSession");
     localStorage.removeItem("adminSessionExpiry");
+    
+    // Clear main user session
+    localStorage.setItem("isLoggedIn", "false");
+    
+    // Navigate to home page
+    navigate("/");
   };
 
   return (
     <div className="page-container">
       <h1>Delete Item</h1>
       
-      {!isAdmin && (
+      {!isLoggedIn ? (
+        <div className="admin-login-container">
+          <div className="admin-login-card">
+            <h3>Login Required</h3>
+            <p>You must be logged in to access the item deletion feature.</p>
+            <div className="form-actions">
+              <button 
+                onClick={() => navigate("/login")}
+                className="btn-submit"
+              >
+                Go to Login
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : !isAdmin ? (
         <div className="admin-login-container">
           <div className="admin-login-card">
             <h3>Admin Access Required</h3>
@@ -204,9 +249,7 @@ function ItemDelete() {
             </button>
           </div>
         </div>
-      )}
-
-      {isAdmin && (
+      ) : (
         <div className="delete-container">
           <div className="admin-header">
             <div className="admin-status">
@@ -220,7 +263,7 @@ function ItemDelete() {
                 onClick={handleAdminLogout}
                 className="btn-logout"
               >
-                Logout
+                Logout from Website
               </button>
             </div>
           </div>
