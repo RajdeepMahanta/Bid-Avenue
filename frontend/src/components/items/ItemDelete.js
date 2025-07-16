@@ -14,6 +14,7 @@ function ItemDelete() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [sessionTimeRemaining, setSessionTimeRemaining] = useState("");
 
   const formatDate = (dateString) => {
     const options = {
@@ -30,7 +31,52 @@ function ItemDelete() {
 
   useEffect(() => {
     fetchItems();
+    checkAdminSession();
   }, []);
+
+  // Timer to check session expiry and update remaining time
+  useEffect(() => {
+    if (!isAdmin) return;
+
+    const timer = setInterval(() => {
+      const sessionExpiry = localStorage.getItem("adminSessionExpiry");
+      if (sessionExpiry) {
+        const now = new Date().getTime();
+        const expiry = parseInt(sessionExpiry);
+        const timeLeft = expiry - now;
+
+        if (timeLeft <= 0) {
+          handleAdminLogout();
+          setError("Admin session expired. Please login again.");
+        } else {
+          const minutes = Math.floor(timeLeft / (1000 * 60));
+          const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+          setSessionTimeRemaining(`${minutes}m ${seconds}s`);
+        }
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isAdmin]);
+
+  const checkAdminSession = () => {
+    const adminSession = localStorage.getItem("adminSession");
+    const sessionExpiry = localStorage.getItem("adminSessionExpiry");
+    
+    if (adminSession === "authenticated" && sessionExpiry) {
+      const now = new Date().getTime();
+      const expiry = parseInt(sessionExpiry);
+      
+      if (now < expiry) {
+        setIsAdmin(true);
+      } else {
+        // Session expired, clear it
+        localStorage.removeItem("adminSession");
+        localStorage.removeItem("adminSessionExpiry");
+        setIsAdmin(false);
+      }
+    }
+  };
 
   const fetchItems = async () => {
     try {
@@ -103,9 +149,27 @@ function ItemDelete() {
     setError("");
     if (adminPasscode === "adminaccess123") {
       setIsAdmin(true);
+      
+      // Set session with 2 hour expiration
+      const expiryTime = new Date().getTime() + (2 * 60 * 60 * 1000); // 2 hours
+      localStorage.setItem("adminSession", "authenticated");
+      localStorage.setItem("adminSessionExpiry", expiryTime.toString());
+      
+      // Clear the password input for security
+      setAdminPasscode("");
     } else {
       setError("Incorrect admin passcode. Please try again.");
     }
+  };
+
+  const handleAdminLogout = () => {
+    setIsAdmin(false);
+    setAdminPasscode("");
+    setSelectedItemDetails(null);
+    setSelectedItemId("");
+    setError("");
+    localStorage.removeItem("adminSession");
+    localStorage.removeItem("adminSessionExpiry");
   };
 
   return (
@@ -144,6 +208,23 @@ function ItemDelete() {
 
       {isAdmin && (
         <div className="delete-container">
+          <div className="admin-header">
+            <div className="admin-status">
+              <div className="admin-info">
+                <span className="admin-indicator">🛡️ Admin Access</span>
+                {sessionTimeRemaining && (
+                  <span className="session-timer">Session: {sessionTimeRemaining}</span>
+                )}
+              </div>
+              <button 
+                onClick={handleAdminLogout}
+                className="btn-logout"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          
           <div className="item-selector-card">
             <h3>Select Item to Delete</h3>
             {error && <div className="error-message">{error}</div>}
