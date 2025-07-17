@@ -16,4 +16,7 @@ router.put("/:id/bid", itemController.biddingUpdate);
 // DELETE delete an item by ID
 router.delete("/:id", itemController.deleteItem);
 
+// POST extend all auction times (Admin only)
+router.post("/extend-auctions", itemController.extendAllAuctions);
+
 module.exports = router;

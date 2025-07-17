@@ -133,3 +133,50 @@ exports.deleteItem = (req, res) => {
     })
     .catch((err) => res.status(500).json({ error: err.message }));
 };
+
+// Extend auction end time for all items (Admin only)
+exports.extendAllAuctions = async (req, res) => {
+  const { hours } = req.body;
+
+  try {
+    if (!hours || hours <= 0) {
+      return res.status(400).json({ 
+        error: "Please provide a valid number of hours to extend" 
+      });
+    }
+
+    const hoursToAdd = parseInt(hours);
+    const millisecondsToAdd = hoursToAdd * 60 * 60 * 1000;
+
+    // Get all items
+    const items = await Item.find({});
+    
+    if (items.length === 0) {
+      return res.status(404).json({ message: "No items found" });
+    }
+
+    // Update all items with extended auction end time
+    const updatePromises = items.map(item => {
+      const currentEndTime = new Date(item.auctionEndTime);
+      const newEndTime = new Date(currentEndTime.getTime() + millisecondsToAdd);
+      
+      return Item.findByIdAndUpdate(
+        item._id,
+        { auctionEndTime: newEndTime },
+        { new: true }
+      );
+    });
+
+    const updatedItems = await Promise.all(updatePromises);
+
+    res.status(200).json({
+      message: `Successfully extended ${updatedItems.length} auctions by ${hoursToAdd} hours`,
+      count: updatedItems.length,
+      hoursExtended: hoursToAdd
+    });
+
+  } catch (err) {
+    console.error("Error extending auctions:", err);
+    res.status(500).json({ error: "Failed to extend auctions" });
+  }
+};

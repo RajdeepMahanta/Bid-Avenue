@@ -18,6 +18,8 @@ function ItemDelete() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [sessionTimeRemaining, setSessionTimeRemaining] = useState("");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [extensionHours, setExtensionHours] = useState("");
+  const [isExtending, setIsExtending] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true"
   );
@@ -235,9 +237,48 @@ function ItemDelete() {
     navigate("/");
   };
 
+  const handleExtendAuctions = async () => {
+    if (!extensionHours || parseInt(extensionHours) <= 0) {
+      toast.error("Please enter a valid number of hours");
+      return;
+    }
+
+    setIsExtending(true);
+    setError("");
+
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/items/extend-auctions`,
+        { hours: parseInt(extensionHours) },
+        {
+          headers: {
+            Authorization: `Bearer ${adminPasscode}`,
+          },
+        }
+      );
+
+      if (res.status === 200) {
+        toast.success(`Successfully extended ${res.data.count} auctions by ${res.data.hoursExtended} hours!`);
+        setExtensionHours("");
+        fetchItems(); // Refresh items list
+        if (selectedItemDetails) {
+          fetchSelectedItemDetails(selectedItemId); // Refresh selected item details
+        }
+      } else {
+        throw new Error("Failed to extend auctions");
+      }
+    } catch (err) {
+      console.error("Error extending auctions:", err);
+      toast.error("Failed to extend auctions. Please try again.");
+      setError("Failed to extend auctions. Please try again.");
+    } finally {
+      setIsExtending(false);
+    }
+  };
+
   return (
     <div className="page-container">
-      <h1>Delete Item</h1>
+      <h1>Admin Panel</h1>
       
       {!isLoggedIn ? (
         <div className="admin-login-container">
@@ -298,6 +339,60 @@ function ItemDelete() {
               >
                 Logout
               </button>
+            </div>
+          </div>
+          
+          {/* Auction Summary Panel */}
+          <div className="auction-summary-card">
+            <h3>📊 Auction Summary</h3>
+            <div className="summary-stats">
+              <div className="stat-item">
+                <span className="stat-label">Total Items:</span>
+                <span className="stat-value">{items.length}</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Active Auctions:</span>
+                <span className="stat-value active">{items.filter(item => !checkAuctionStatus(item.auctionEndTime)).length}</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-label">Ended Auctions:</span>
+                <span className="stat-value ended">{items.filter(item => checkAuctionStatus(item.auctionEndTime)).length}</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Auction Extension Panel */}
+          <div className="auction-extension-card">
+            <h3>🕒 Extend All Auctions</h3>
+            <p>Extend the end time of all auction items (including sold out items)</p>
+            {error && <div className="error-message">{error}</div>}
+            
+            <div className="extension-controls">
+              <div className="form-group">
+                <label htmlFor="extensionHours">Hours to extend:</label>
+                <input
+                  type="number"
+                  id="extensionHours"
+                  min="1"
+                  max="168"
+                  placeholder="Enter hours (1-168)"
+                  value={extensionHours}
+                  onChange={(e) => setExtensionHours(e.target.value)}
+                  className="extension-input"
+                />
+              </div>
+              
+              <button 
+                onClick={handleExtendAuctions}
+                className="btn-extend"
+                disabled={isExtending || !extensionHours || parseInt(extensionHours) <= 0}
+              >
+                {isExtending ? "Extending..." : `Extend All by ${extensionHours || "X"} Hours`}
+              </button>
+            </div>
+            
+            <div className="extension-info">
+              <small>💡 This will extend ALL auctions, including ended ones (reactivating them)</small>
             </div>
           </div>
           

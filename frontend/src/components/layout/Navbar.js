@@ -77,7 +77,7 @@ const Navbar = () => {
                 <Link to="/items/create">Add Item</Link>
               </li>
               <li>
-                <Link to="/items/delete">Delete Item</Link>
+                <Link to="/items/delete">Admin</Link>
               </li>
               <li>
                 <button onClick={handleLogout} className="logout-button">
