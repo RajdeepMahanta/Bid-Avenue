@@ -18,8 +18,9 @@ function ItemDelete() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [sessionTimeRemaining, setSessionTimeRemaining] = useState("");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [extensionHours, setExtensionHours] = useState("");
-  const [isExtending, setIsExtending] = useState(false);
+  const [selectedTimeItemId, setSelectedTimeItemId] = useState("");
+  const [newAuctionEndTime, setNewAuctionEndTime] = useState("");
+  const [isUpdatingTime, setIsUpdatingTime] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") === "true"
   );
@@ -206,8 +207,8 @@ function ItemDelete() {
     if (adminPasscode === "adminaccess123") {
       setIsAdmin(true);
       
-      // Set session with 2 hour expiration
-      const expiryTime = new Date().getTime() + (2 * 60 * 60 * 1000); // 2 hours
+      // Set session with 90 minute expiration
+      const expiryTime = new Date().getTime() + (90 * 60 * 1000); // 90 minutes
       localStorage.setItem("adminSession", "authenticated");
       localStorage.setItem("adminSessionExpiry", expiryTime.toString());
       
@@ -237,19 +238,32 @@ function ItemDelete() {
     navigate("/");
   };
 
-  const handleExtendAuctions = async () => {
-    if (!extensionHours || parseInt(extensionHours) <= 0) {
-      toast.error("Please enter a valid number of hours");
+  const handleUpdateAuctionTime = async () => {
+    if (!selectedTimeItemId) {
+      toast.error("Please select an auction item");
       return;
     }
 
-    setIsExtending(true);
+    if (!newAuctionEndTime) {
+      toast.error("Please select a new auction end time");
+      return;
+    }
+
+    const selectedTime = new Date(newAuctionEndTime);
+    const now = new Date();
+
+    if (selectedTime <= now) {
+      toast.error("Auction end time must be in the future");
+      return;
+    }
+
+    setIsUpdatingTime(true);
     setError("");
 
     try {
-      const res = await axios.post(
-        `${BASE_URL}/items/extend-auctions`,
-        { hours: parseInt(extensionHours) },
+      const res = await axios.put(
+        `${BASE_URL}/items/${selectedTimeItemId}/auction-time`,
+        { auctionEndTime: newAuctionEndTime },
         {
           headers: {
             Authorization: `Bearer ${adminPasscode}`,
@@ -258,21 +272,23 @@ function ItemDelete() {
       );
 
       if (res.status === 200) {
-        toast.success(`Successfully extended ${res.data.count} auctions by ${res.data.hoursExtended} hours!`);
-        setExtensionHours("");
+        const selectedItem = items.find(item => item._id === selectedTimeItemId);
+        toast.success(`Successfully updated auction end time for "${selectedItem?.title || 'selected item'}"`);
+        setSelectedTimeItemId("");
+        setNewAuctionEndTime("");
         fetchItems(); // Refresh items list
-        if (selectedItemDetails) {
-          fetchSelectedItemDetails(selectedItemId); // Refresh selected item details
+        if (selectedItemDetails && selectedItemDetails._id === selectedTimeItemId) {
+          fetchSelectedItemDetails(selectedTimeItemId); // Refresh selected item details if it's the same item
         }
       } else {
-        throw new Error("Failed to extend auctions");
+        throw new Error("Failed to update auction time");
       }
     } catch (err) {
-      console.error("Error extending auctions:", err);
-      toast.error("Failed to extend auctions. Please try again.");
-      setError("Failed to extend auctions. Please try again.");
+      console.error("Error updating auction time:", err);
+      toast.error("Failed to update auction time. Please try again.");
+      setError("Failed to update auction time. Please try again.");
     } finally {
-      setIsExtending(false);
+      setIsUpdatingTime(false);
     }
   };
 
@@ -361,38 +377,69 @@ function ItemDelete() {
             </div>
           </div>
           
-          {/* Auction Extension Panel */}
+          {/* Auction Time Update Panel */}
           <div className="auction-extension-card">
-            <h3>🕒 Extend All Auctions</h3>
-            <p>Extend the end time of all auction items (including sold out items)</p>
+            <h3>🕒 Update Auction End Time</h3>
+            <p>Select an auction item and set a new end time</p>
             {error && <div className="error-message">{error}</div>}
             
             <div className="extension-controls">
               <div className="form-group">
-                <label htmlFor="extensionHours">Hours to extend:</label>
+                <label htmlFor="timeItemSelect">Select auction item:</label>
+                <select
+                  id="timeItemSelect"
+                  onChange={(e) => {
+                    setSelectedTimeItemId(e.target.value);
+                    setNewAuctionEndTime(""); // Clear the datetime input when selection changes
+                  }}
+                  value={selectedTimeItemId}
+                  className="item-select"
+                >
+                  <option value="" disabled>
+                    Choose an auction to update
+                  </option>
+                  {items.map((item) => {
+                    const isEnded = checkAuctionStatus(item.auctionEndTime);
+                    return (
+                      <option key={item._id} value={item._id}>
+                        {item.title} - {isEnded ? '🔴 ENDED' : '🟢 ACTIVE'} - Current End: {new Date(item.auctionEndTime).toLocaleDateString()}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              
+              {selectedTimeItemId && (
+                <div className="current-time-info">
+                  <small>
+                    Current end time: <strong>{formatDate(items.find(item => item._id === selectedTimeItemId)?.auctionEndTime)}</strong>
+                  </small>
+                </div>
+              )}
+              
+              <div className="form-group">
+                <label htmlFor="newAuctionEndTime">New auction end time:</label>
                 <input
-                  type="number"
-                  id="extensionHours"
-                  min="1"
-                  max="168"
-                  placeholder="Enter hours (1-168)"
-                  value={extensionHours}
-                  onChange={(e) => setExtensionHours(e.target.value)}
+                  type="datetime-local"
+                  id="newAuctionEndTime"
+                  value={newAuctionEndTime}
+                  onChange={(e) => setNewAuctionEndTime(e.target.value)}
                   className="extension-input"
+                  min={new Date(Date.now() + 60000).toISOString().slice(0, 16)} // At least 1 minute from now
                 />
               </div>
               
               <button 
-                onClick={handleExtendAuctions}
+                onClick={handleUpdateAuctionTime}
                 className="btn-extend"
-                disabled={isExtending || !extensionHours || parseInt(extensionHours) <= 0}
+                disabled={isUpdatingTime || !selectedTimeItemId || !newAuctionEndTime}
               >
-                {isExtending ? "Extending..." : `Extend All by ${extensionHours || "X"} Hours`}
+                {isUpdatingTime ? "Updating..." : "Update Auction Time"}
               </button>
             </div>
             
             <div className="extension-info">
-              <small>💡 This will extend ALL auctions, including ended ones (reactivating them)</small>
+              <small>💡 Updating ended auctions will reactivate them for bidding</small>
             </div>
           </div>
           

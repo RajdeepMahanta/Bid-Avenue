@@ -180,3 +180,49 @@ exports.extendAllAuctions = async (req, res) => {
     res.status(500).json({ error: "Failed to extend auctions" });
   }
 };
+
+// Update specific auction end time (Admin only)
+exports.updateAuctionEndTime = async (req, res) => {
+  const { id } = req.params;
+  const { auctionEndTime } = req.body;
+
+  try {
+    if (!auctionEndTime) {
+      return res.status(400).json({ 
+        error: "Please provide a valid auction end time" 
+      });
+    }
+
+    const newEndTime = new Date(auctionEndTime);
+    const now = new Date();
+
+    // Validate that the new end time is in the future
+    if (newEndTime <= now) {
+      return res.status(400).json({ 
+        error: "Auction end time must be in the future" 
+      });
+    }
+
+    const item = await Item.findById(id);
+    
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    // Update the auction end time
+    const updatedItem = await Item.findByIdAndUpdate(
+      id,
+      { auctionEndTime: newEndTime },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: `Successfully updated auction end time for "${updatedItem.title}"`,
+      item: updatedItem
+    });
+
+  } catch (err) {
+    console.error("Error updating auction end time:", err);
+    res.status(500).json({ error: "Failed to update auction end time" });
+  }
+};

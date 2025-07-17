@@ -19,4 +19,7 @@ router.delete("/:id", itemController.deleteItem);
 // POST extend all auction times (Admin only)
 router.post("/extend-auctions", itemController.extendAllAuctions);
 
+// PUT update specific auction end time (Admin only)
+router.put("/:id/auction-time", itemController.updateAuctionEndTime);
+
 module.exports = router;

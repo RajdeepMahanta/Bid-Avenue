@@ -714,7 +714,7 @@
 .extension-controls {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
   align-items: center;
   margin-bottom: 1rem;
 }
@@ -726,9 +726,14 @@
   padding: 0.8rem 1rem;
   color: #ffffff;
   font-size: 1rem;
-  width: 200px;
+  width: 250px;
   text-align: center;
   transition: all 0.3s ease;
+}
+
+.extension-input[type="datetime-local"] {
+  width: 300px;
+  text-align: left;
 }
 
 .extension-input:focus {
@@ -740,6 +745,37 @@
 
 .extension-input::placeholder {
   color: rgba(255, 255, 255, 0.6);
+}
+
+/* Style for datetime-local input */
+.extension-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.item-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: #ffffff;
+  font-size: 1rem;
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.3s ease;
+}
+
+.item-select:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.item-select option {
+  background: #2575fc;
+  color: #ffffff;
+  padding: 0.5rem;
 }
 
 .btn-extend {
@@ -782,6 +818,25 @@
   line-height: 1.4;
 }
 
+.current-time-info {
+  padding: 0.8rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  border-left: 3px solid #ffd700;
+  margin: 0.5rem 0;
+}
+
+.current-time-info small {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.current-time-info strong {
+  color: #ffd700;
+  font-weight: 600;
+}
+
 /* Responsive extension panel */
 @media (max-width: 768px) {
   .auction-summary-card {
@@ -804,17 +859,26 @@
   }
   
   .extension-controls {
-    gap: 0.8rem;
+    gap: 1.2rem;
   }
   
   .extension-input {
     width: 100%;
-    max-width: 250px;
+    max-width: 280px;
+  }
+  
+  .extension-input[type="datetime-local"] {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .item-select {
+    max-width: 100%;
   }
   
   .btn-extend {
     width: 100%;
-    max-width: 250px;
+    max-width: 280px;
     min-width: auto;
   }
 }
