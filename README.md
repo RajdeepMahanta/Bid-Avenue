@@ -278,7 +278,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Your Name**
 - GitHub: [@RajdeepMahanta](https://github.com/RajdeepMahanta)
 - LinkedIn: [Rajdeep Mahanta](https://linkedin.com/in/rajdeepmahanta03)
-- Email: rajdeepmahanta287@gmail.coml@gmail.com
+- Email: rajdeepmahanta287@gmail.com
 
 ## 🙏 Acknowledgments
 
