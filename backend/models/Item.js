@@ -17,6 +17,10 @@ const ItemSchema = mongoose.Schema({
     type: mongoose.Schema.Types.Number,
     default: 0,
   },
+  currentBidder: {
+    type: mongoose.Schema.Types.String,
+    default: null,
+  },
   auctionEndTime: {
     type: mongoose.Schema.Types.Date,
     required: true,
