@@ -94,7 +94,26 @@ function ItemsList() {
     <div className="page-container">
       <h1>Auction Items</h1>
       <div className="items-grid">
-        {items.map((item) => {
+        {items
+          .sort((a, b) => {
+            // Sort by auction status: active auctions first, then ended auctions
+            const aEnded = checkAuctionStatus(a.auctionEndTime);
+            const bEnded = checkAuctionStatus(b.auctionEndTime);
+            
+            // If one is ended and other is not, prioritize the active one
+            if (aEnded && !bEnded) return 1;
+            if (!aEnded && bEnded) return -1;
+            
+            // If both have same status, sort by auction end time
+            // For active auctions: earliest ending first
+            // For ended auctions: most recently ended first
+            if (!aEnded && !bEnded) {
+              return new Date(a.auctionEndTime) - new Date(b.auctionEndTime);
+            } else {
+              return new Date(b.auctionEndTime) - new Date(a.auctionEndTime);
+            }
+          })
+          .map((item) => {
           const isAuctionEnded = checkAuctionStatus(item.auctionEndTime);
           const itemTimeRemaining = timeRemaining[item._id] || calculateTimeRemaining(item.auctionEndTime);
           
