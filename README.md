@@ -5,22 +5,36 @@ A modern, full-stack online auction platform built with the MERN stack, featurin
 ## 📸 Screenshots
 
 ### 🏠 Homepage
-![Landing Page](screenshots/landing.png) ![Homepage](screenshots/home.png)
+<p align="center">
+  <img src="screenshots/landing.png" width="45%" />
+  <img src="screenshots/home.png" width="45%" />
+</p>
 
 ### 🔐 Authentication
-![Login Page](screenshots/login.png) ![Register Page](screenshots/register.png)
+<p align="center">
+  <img src="screenshots/login.png" width="45%" />
+  <img src="screenshots/register.png" width="45%" />
+</p>
 
 ### 🏷️ Auction Items
 ![Items List](screenshots/items.png)
 
 ### 🏷️ Adding Items
-![Add Item](screenshots/add.png) ![Add Image](screenshots/image.png) ![Item Added](screenshots/added.png)
+<p align="center">
+  <img src="screenshots/add.png" width="30%" />
+  <img src="screenshots/image.png" width="30%" />
+  <img src="screenshots/added.png" width="30%" />
+</p>
 
 ### 💰 Bidding Interface
 ![Bidding Page](screenshots/bid.png)
 
 ### 🛡️ Admin Panel
-![Admin Login](screenshots/admin.png) ![Admin Delete](screenshots/delete.png) ![Delete Confirmation](screenshots/confirm.png)
+<p align="center">
+  <img src="screenshots/admin.png" width="30%" />
+  <img src="screenshots/delete.png" width="30%" />
+  <img src="screenshots/confirm.png" width="30%" />
+</p>
 
 
 ## 🎥 Demo Video
