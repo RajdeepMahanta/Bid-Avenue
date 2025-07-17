@@ -37,11 +37,6 @@ A modern, full-stack online auction platform built with the MERN stack, featurin
 </p>
 
 
-## 🎥 Demo Video
-
-<!-- Add your demo video here -->
-*Demo video will be added here*
-
 ## ✨ Features
 
 ### 🔐 Authentication & Authorization
