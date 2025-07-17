@@ -4,8 +4,24 @@ A modern, full-stack online auction platform built with the MERN stack, featurin
 
 ## 📸 Screenshots
 
-<!-- Add your screenshots here -->
-*Screenshots will be added here*
+### 🏠 Homepage
+![Landing Page](screenshots/landing.png) ![Homepage](screenshots/home.png)
+
+### 🔐 Authentication
+![Login Page](screenshots/login.png) ![Register Page](screenshots/register.png)
+
+### 🏷️ Auction Items
+![Items List](screenshots/items.png)
+
+### 🏷️ Adding Items
+![Add Item](screenshots/add.png) ![Add Image](screenshots/image.png) ![Item Added](screenshots/added.png)
+
+### 💰 Bidding Interface
+![Bidding Page](screenshots/bid.png)
+
+### 🛡️ Admin Panel
+![Admin Login](screenshots/admin.png) ![Admin Delete](screenshots/delete.png) ![Delete Confirmation](screenshots/confirm.png)
+
 
 ## 🎥 Demo Video
 
