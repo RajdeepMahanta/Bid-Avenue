@@ -117,6 +117,13 @@ function ItemsList() {
           const isAuctionEnded = checkAuctionStatus(item.auctionEndTime);
           const itemTimeRemaining = timeRemaining[item._id] || calculateTimeRemaining(item.auctionEndTime);
           
+          // Debug logging
+          console.log(`Item: ${item.title}, Auction End: ${item.auctionEndTime}, Is Ended: ${isAuctionEnded}, Current Bidder: ${item.currentBidder}`);
+          
+          // TEMPORARY TEST: Force one item to show as ended with a winner for testing
+          const testEnded = item.title.toLowerCase().includes('test') || item._id === '6697a05b3df78fcffa3bb21f';
+          const finalIsEnded = isAuctionEnded || testEnded;
+          
           return (
             <div key={item._id} className="item-card">
               <div className="item-image-container">
@@ -128,7 +135,7 @@ function ItemsList() {
                     e.target.src = "https://via.placeholder.com/400x200/cccccc/666666?text=No+Image";
                   }}
                 />
-                {isAuctionEnded && <div className="sold-overlay">SOLD OUT</div>}
+                {finalIsEnded && <div className="sold-overlay">SOLD OUT</div>}
               </div>
               <div className="item-content">
                 <h3 className="item-title">{item.title}</h3>
@@ -136,12 +143,18 @@ function ItemsList() {
                 <div className="item-pricing">
                   <p className="base-bid">Base Bid: <span>${item.startingBid}</span></p>
                   <p className="current-bid">Current Bid: <span>${item.currentBid}</span></p>
-                  {item.currentBidder && (
+                  {item.currentBidder && !finalIsEnded && (
                     <p className="current-bidder">Current Leader: <span>{item.currentBidder}</span></p>
+                  )}
+                  {finalIsEnded && item.currentBidder && (
+                    <p className="current-bidder">Winner: <span>{item.currentBidder}</span></p>
+                  )}
+                  {finalIsEnded && !item.currentBidder && (
+                    <p className="current-bidder">Winner: <span>Test Winner</span></p>
                   )}
                 </div>
                 <div className="item-footer">
-                  {!isAuctionEnded && (
+                  {!finalIsEnded && (
                     <>
                       <p className="auction-time">
                         Ends: {formatDate(item.auctionEndTime)}
@@ -157,16 +170,16 @@ function ItemsList() {
                       </Link>
                     </>
                   )}
-                  {isAuctionEnded && (
+                  {finalIsEnded && (
                     <>
                       <p className="auction-time ended">
                         Ended: {formatDate(item.auctionEndTime)}
                       </p>
                       <div className="sold-out-badge">
                         Auction Ended
-                        {item.currentBidder && (
+                        {(item.currentBidder || testEnded) && (
                           <div className="winner-info">
-                            Winner: {item.currentBidder}
+                            Winner: {item.currentBidder || 'Test Winner'}
                           </div>
                         )}
                       </div>
