@@ -136,6 +136,9 @@ function ItemsList() {
                 <div className="item-pricing">
                   <p className="base-bid">Base Bid: <span>${item.startingBid}</span></p>
                   <p className="current-bid">Current Bid: <span>${item.currentBid}</span></p>
+                  {item.currentBidder && (
+                    <p className="current-bidder">Current Leader: <span>{item.currentBidder}</span></p>
+                  )}
                 </div>
                 <div className="item-footer">
                   {!isAuctionEnded && (

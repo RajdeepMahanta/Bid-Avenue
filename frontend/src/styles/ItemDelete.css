@@ -198,22 +198,39 @@
 
 .selected-item-card .item-pricing {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
 .selected-item-card .base-bid,
-.selected-item-card .current-bid {
+.selected-item-card .current-bid,
+.selected-item-card .current-bidder {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.9);
   margin: 0;
 }
 
 .selected-item-card .base-bid span,
-.selected-item-card .current-bid span {
+.selected-item-card .current-bid span,
+.selected-item-card .current-bidder span {
   font-weight: 700;
   color: #ffffff;
   font-size: 1.1rem;
+}
+
+.selected-item-card .current-bidder {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border-radius: 8px;
+  border-left: 3px solid #ffd700;
+  font-size: 0.85rem;
+}
+
+.selected-item-card .current-bidder span {
+  color: #ffd700;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .selected-item-card .item-footer {
@@ -223,10 +240,14 @@
 }
 
 .selected-item-card .auction-time {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.8);
-  margin: 0;
+  margin-bottom: 1rem;
   text-align: center;
+}
+
+.auction-time.ended {
+  color: #ff6b6b;
 }
 
 /* Form Styles */

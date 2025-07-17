@@ -36,6 +36,12 @@ function ItemDelete() {
     return new Date(dateString).toLocaleString("en-IN", options);
   };
 
+  const checkAuctionStatus = (auctionEndTime) => {
+    const now = new Date();
+    const endTime = new Date(auctionEndTime);
+    return endTime <= now;
+  };
+
   useEffect(() => {
     fetchItems();
     checkAdminSession();
@@ -339,12 +345,25 @@ function ItemDelete() {
                 <div className="item-pricing">
                   <p className="base-bid">Base Bid: <span>${selectedItemDetails.startingBid}</span></p>
                   <p className="current-bid">Current Bid: <span>${selectedItemDetails.currentBid}</span></p>
+                  {selectedItemDetails.currentBidder && !checkAuctionStatus(selectedItemDetails.auctionEndTime) && (
+                    <p className="current-bidder">Current Leader: <span>{selectedItemDetails.currentBidder}</span></p>
+                  )}
+                  {selectedItemDetails.currentBidder && checkAuctionStatus(selectedItemDetails.auctionEndTime) && (
+                    <p className="current-bidder">Winner: <span>{selectedItemDetails.currentBidder}</span></p>
+                  )}
                 </div>
                 
                 <div className="item-footer">
-                  <p className="auction-time">
-                    Ends: {formatDate(selectedItemDetails.auctionEndTime)}
-                  </p>
+                  {!checkAuctionStatus(selectedItemDetails.auctionEndTime) && (
+                    <p className="auction-time">
+                      Ends: {formatDate(selectedItemDetails.auctionEndTime)}
+                    </p>
+                  )}
+                  {checkAuctionStatus(selectedItemDetails.auctionEndTime) && (
+                    <p className="auction-time ended">
+                      Ended: {formatDate(selectedItemDetails.auctionEndTime)}
+                    </p>
+                  )}
                 </div>
               </div>
 

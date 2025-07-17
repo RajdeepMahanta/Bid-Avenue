@@ -148,22 +148,39 @@
 
 .item-pricing {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
 .base-bid,
-.current-bid {
+.current-bid,
+.current-bidder {
   font-size: 0.85rem;
   color: rgba(255, 255, 255, 0.9);
   margin: 0;
 }
 
 .base-bid span,
-.current-bid span {
+.current-bid span,
+.current-bidder span {
   font-weight: 700;
   color: #ffffff;
   font-size: 1rem;
+}
+
+.current-bidder {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border-radius: 8px;
+  border-left: 3px solid #ffd700;
+  font-size: 0.8rem;
+}
+
+.current-bidder span {
+  color: #ffd700;
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 
 .item-footer {
@@ -232,8 +249,14 @@
 }
 
 .winner-info {
-  font-size: 0.75rem;
-  margin-top: 4px;
-  color: rgba(255, 107, 107, 0.9);
-  font-weight: 500;
+  font-size: 0.8rem;
+  margin-top: 8px;
+  color: #ffd700;
+  font-weight: 600;
+  background: rgba(255, 215, 0, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  backdrop-filter: blur(3px);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
