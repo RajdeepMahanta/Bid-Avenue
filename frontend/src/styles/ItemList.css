@@ -248,7 +248,7 @@
   box-sizing: border-box;
 }
 
-.winner-info {
+/* .winner-info {
   font-size: 0.8rem;
   margin-top: 8px;
   color: #ffd700;
@@ -259,4 +259,4 @@
   border: 1px solid rgba(255, 215, 0, 0.3);
   backdrop-filter: blur(3px);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-}
+} */

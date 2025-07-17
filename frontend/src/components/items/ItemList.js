@@ -167,11 +167,11 @@ function ItemsList() {
                       </p>
                       <div className="sold-out-badge">
                         Auction Ended
-                        {item.currentBidder && (
+                        {/* {item.currentBidder && (
                           <div className="winner-info">
                             Winner: {item.currentBidder}
                           </div>
-                        )}
+                        )} */}
                       </div>
                     </>
                   )}
