@@ -20,6 +20,7 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   width: 80%;
   max-width: 900px;
+  position: relative;
 }
 
 /* Mobile responsiveness for navbar */
@@ -29,6 +30,74 @@
     padding: 12px 20px;
     border-radius: 30px;
   }
+  
+  /* Show hamburger menu only when logged in */
+  .hamburger-menu {
+    display: flex;
+  }
+  
+  /* Hide regular menu on mobile when logged in */
+  .navbar-menu.logged-in {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    margin-top: 10px;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 1000;
+  }
+  
+  /* Show mobile menu when open */
+  .navbar-menu.mobile-open {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    margin-top: 10px;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 1000;
+  }
+  
+  /* When not logged in, show menu normally (no hamburger needed) */
+  .navbar-menu.not-logged-in {
+    display: flex;
+    position: static;
+    background: none;
+    backdrop-filter: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin-top: 0;
+    padding: 0;
+    flex-direction: row;
+    gap: 10px;
+  }
+}
+
+/* Desktop view - always show menu normally */
+@media (min-width: 769px) {
+  .hamburger-menu {
+    display: none !important;
+  }
+  
+  .navbar-menu {
+    display: flex !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -36,8 +105,13 @@
     width: 95%;
     padding: 10px 15px;
     border-radius: 25px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 10px;
+  }
+  
+  .navbar-menu {
+    padding: 15px;
+    gap: 12px;
   }
 }
 
@@ -73,14 +147,92 @@
   align-items: center;
 }
 
+/* Hamburger Menu Styles */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  position: relative;
+  z-index: 1001;
+}
+
+.hamburger-line {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  margin: 3px 0;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.hamburger-line.open:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.hamburger-line.open:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-line.open:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
 .navbar ul li {
   margin-left: 20px;
+}
+
+/* Mobile menu item styles */
+.navbar-menu li {
+  margin: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.navbar-menu li a,
+.navbar-menu li button {
+  width: 100%;
+  display: block;
+  padding: 12px 20px;
+  text-decoration: none;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+/* Override for not-logged-in mobile menu items */
+.navbar-menu.not-logged-in li {
+  width: auto;
+  margin-left: 8px;
+}
+
+.navbar-menu.not-logged-in li a,
+.navbar-menu.not-logged-in li button {
+  width: auto;
+  display: inline-block;
+  padding: 6px 12px;
 }
 
 /* Mobile responsiveness for navbar items */
 @media (max-width: 768px) {
   .navbar ul li {
     margin-left: 15px;
+  }
+  
+  /* Override for mobile menu items */
+  .navbar-menu li {
+    margin-left: 0;
+  }
+  
+  .navbar-menu li a {
+    color: #333;
+    background-color: rgba(37, 117, 252, 0.1);
+  }
+  
+  .navbar-menu li a:hover {
+    background-color: rgba(37, 117, 252, 0.2);
+    color: #2575fc;
   }
 }
 
@@ -90,6 +242,17 @@
   }
   
   .navbar ul li a {
+    font-size: 0.9em;
+  }
+  
+  /* Override for mobile menu items */
+  .navbar-menu li {
+    margin-left: 0;
+  }
+  
+  .navbar-menu li a,
+  .navbar-menu li button {
+    padding: 10px 15px;
     font-size: 0.9em;
   }
 }
@@ -146,6 +309,15 @@
     padding: 8px 16px;
     font-size: 0.9em;
   }
+  
+  /* Mobile menu button styles */
+  .navbar-menu .logout-button,
+  .navbar-menu .login-button {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 1em;
+  }
 }
 
 @media (max-width: 480px) {
@@ -153,5 +325,12 @@
     padding: 6px 12px;
     font-size: 0.8em;
     border-radius: 25px;
+  }
+  
+  /* Mobile menu button styles */
+  .navbar-menu .logout-button,
+  .navbar-menu .login-button {
+    padding: 10px 15px;
+    font-size: 0.9em;
   }
 }

@@ -8,6 +8,7 @@ const Navbar = () => {
     localStorage.getItem("isLoggedIn") === "true"
   );
   const [forceUpdate, setForceUpdate] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   // Listen for storage changes to update navbar state
@@ -49,6 +50,7 @@ const Navbar = () => {
     
     // Immediately update the state
     setIsLoggedIn(false);
+    setMobileMenuOpen(false); // Close mobile menu on logout
     
     // Dispatch custom logout event
     window.dispatchEvent(new CustomEvent("userLogout"));
@@ -61,23 +63,45 @@ const Navbar = () => {
     }, 100);
   };
 
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <div className="navbar-container">
       <nav className="navbar">
         <h1>
           <Link to="/">Bid Avenue</Link>
         </h1>
-        <ul>
+        
+        {/* Hamburger Menu Button - Only show when logged in on mobile */}
+        {isLoggedIn && (
+          <button 
+            className="hamburger-menu"
+            onClick={toggleMobileMenu}
+            aria-label="Toggle mobile menu"
+          >
+            <span className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></span>
+            <span className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></span>
+            <span className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></span>
+          </button>
+        )}
+        
+        <ul className={`navbar-menu ${isLoggedIn ? (mobileMenuOpen ? 'mobile-open' : 'logged-in') : 'not-logged-in'}`}>
           {isLoggedIn ? (
             <>
               <li>
-                <Link to="/items">Items</Link>
+                <Link to="/items" onClick={closeMobileMenu}>Items</Link>
               </li>
               <li>
-                <Link to="/items/create">Add Item</Link>
+                <Link to="/items/create" onClick={closeMobileMenu}>Add Item</Link>
               </li>
               <li>
-                <Link to="/items/delete">Admin</Link>
+                <Link to="/items/delete" onClick={closeMobileMenu}>Admin</Link>
               </li>
               <li>
                 <button onClick={handleLogout} className="logout-button">
