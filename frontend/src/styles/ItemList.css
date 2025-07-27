@@ -53,22 +53,33 @@
 /* Items Grid Layout */
 .items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   max-width: 1200px;
   width: 100%;
   padding: 0 2rem;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 1024px) {
   .items-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    padding: 0 1rem;
   }
 }
 
-@media (min-width: 1024px) {
+@media (max-width: 768px) {
   .items-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .items-grid {
+    gap: 1rem;
+    padding: 0 0.5rem;
   }
 }
 
@@ -144,6 +155,37 @@
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Mobile responsiveness for item content */
+@media (max-width: 768px) {
+  .item-content {
+    padding: 1rem;
+  }
+  
+  .item-title {
+    font-size: 1.1rem;
+  }
+  
+  .item-description {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+}
+
+@media (max-width: 480px) {
+  .item-content {
+    padding: 0.8rem;
+  }
+  
+  .item-title {
+    font-size: 1rem;
+  }
+  
+  .item-description {
+    font-size: 0.8rem;
+  }
 }
 
 .item-pricing {
@@ -232,6 +274,21 @@
   background-color: #f0f0f0;
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile responsiveness for bid button */
+@media (max-width: 768px) {
+  .place-bid-button {
+    padding: 10px 16px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .place-bid-button {
+    padding: 8px 12px;
+    font-size: 0.85em;
+  }
 }
 
 .sold-out-badge {

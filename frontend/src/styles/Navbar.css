@@ -22,10 +22,42 @@
   max-width: 900px;
 }
 
+/* Mobile responsiveness for navbar */
+@media (max-width: 768px) {
+  .navbar {
+    width: 90%;
+    padding: 12px 20px;
+    border-radius: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    width: 95%;
+    padding: 10px 15px;
+    border-radius: 25px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
 .navbar h1 {
   margin: 0;
   font-size: 1.5em;
   font-weight: 600;
+}
+
+/* Mobile responsiveness for navbar title */
+@media (max-width: 768px) {
+  .navbar h1 {
+    font-size: 1.3em;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar h1 {
+    font-size: 1.1em;
+  }
 }
 
 .navbar h1 a {
@@ -43,6 +75,23 @@
 
 .navbar ul li {
   margin-left: 20px;
+}
+
+/* Mobile responsiveness for navbar items */
+@media (max-width: 768px) {
+  .navbar ul li {
+    margin-left: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar ul li {
+    margin-left: 8px;
+  }
+  
+  .navbar ul li a {
+    font-size: 0.9em;
+  }
 }
 
 .navbar ul li a {
@@ -89,4 +138,20 @@
   color: #fff;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsiveness for buttons */
+@media (max-width: 768px) {
+  .logout-button, .login-button {
+    padding: 8px 16px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .logout-button, .login-button {
+    padding: 6px 12px;
+    font-size: 0.8em;
+    border-radius: 25px;
+  }
 }

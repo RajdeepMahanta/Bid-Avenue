@@ -17,6 +17,21 @@
   }
 }
 
+/* Mobile responsiveness for bidding container */
+@media (max-width: 768px) {
+  .bidding-container {
+    padding: 0 1rem;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bidding-container {
+    padding: 0 0.5rem;
+    gap: 1rem;
+  }
+}
+
 /* Item Card on Bidding Page */
 .bidding-card {
   background: rgba(255, 255, 255, 0.1);
@@ -69,6 +84,35 @@
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: 1rem;
   line-height: 1.4;
+}
+
+/* Mobile responsiveness for bidding card content */
+@media (max-width: 768px) {
+  .bidding-card .item-content {
+    padding: 1rem;
+  }
+  
+  .bidding-card .item-title {
+    font-size: 1.3rem;
+  }
+  
+  .bidding-card .item-description {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bidding-card .item-content {
+    padding: 0.8rem;
+  }
+  
+  .bidding-card .item-title {
+    font-size: 1.1rem;
+  }
+  
+  .bidding-card .item-description {
+    font-size: 0.85rem;
+  }
 }
 
 .bidding-card .item-pricing {
@@ -178,6 +222,29 @@
   color: #ffffff;
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsiveness for bid form card */
+@media (max-width: 768px) {
+  .bid-form-card {
+    padding: 1.5rem;
+  }
+  
+  .bid-form-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bid-form-card {
+    padding: 1rem;
+  }
+  
+  .bid-form-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+  }
 }
 
 .error-message {

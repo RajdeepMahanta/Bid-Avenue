@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 10px;
 }
 
 .home-button {
@@ -21,4 +22,30 @@
   background-color: #f0f0f0;
   transform: translateY(-2px);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile responsiveness for home buttons */
+@media (max-width: 768px) {
+  .home-buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .home-button {
+    padding: 12px 25px;
+    margin: 5px;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-button {
+    padding: 10px 20px;
+    width: 90%;
+    max-width: 250px;
+    font-size: 0.9em;
+  }
 }
