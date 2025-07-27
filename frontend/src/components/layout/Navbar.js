@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { toast } from 'react-toastify';
 import "../../styles/Navbar.css";
 
@@ -10,6 +10,7 @@ const Navbar = () => {
   const [forceUpdate, setForceUpdate] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Listen for storage changes to update navbar state
   useEffect(() => {
@@ -75,7 +76,12 @@ const Navbar = () => {
     <div className="navbar-container">
       <nav className={`navbar ${isLoggedIn ? 'logged-in-nav' : 'not-logged-in-nav'}`}>
         <h1>
-          <Link to="/">Bid Avenue</Link>
+          <Link 
+            to="/" 
+            className={location.pathname === '/' ? 'active' : ''}
+          >
+            Bid Avenue
+          </Link>
         </h1>
         
         {/* Hamburger Menu Button - Only show when logged in on mobile */}
@@ -95,13 +101,31 @@ const Navbar = () => {
           {isLoggedIn ? (
             <>
               <li>
-                <Link to="/items" onClick={closeMobileMenu}>Items</Link>
+                <Link 
+                  to="/items" 
+                  onClick={closeMobileMenu}
+                  className={location.pathname === '/items' || location.pathname.startsWith('/bidding') ? 'active' : ''}
+                >
+                  Items
+                </Link>
               </li>
               <li>
-                <Link to="/items/create" onClick={closeMobileMenu}>Add Item</Link>
+                <Link 
+                  to="/items/create" 
+                  onClick={closeMobileMenu}
+                  className={location.pathname === '/items/create' ? 'active' : ''}
+                >
+                  Add Item
+                </Link>
               </li>
               <li>
-                <Link to="/items/delete" onClick={closeMobileMenu}>Admin</Link>
+                <Link 
+                  to="/items/delete" 
+                  onClick={closeMobileMenu}
+                  className={location.pathname === '/items/delete' ? 'active' : ''}
+                >
+                  Admin
+                </Link>
               </li>
               <li>
                 <button onClick={handleLogout} className="logout-button">

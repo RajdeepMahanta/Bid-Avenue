@@ -121,6 +121,17 @@
 .navbar h1 a {
   color: #333;
   text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.navbar h1 a:hover {
+  color: #2575fc;
+}
+
+.navbar h1 a.active {
+  color: #2575fc;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(37, 117, 252, 0.4);
 }
 
 .navbar ul {
@@ -267,6 +278,17 @@
     color: #2575fc;
   }
   
+  .navbar-menu.mobile-open li a.active {
+    background-color: rgba(37, 117, 252, 0.3);
+    color: #2575fc;
+    font-weight: 600;
+  }
+  
+  /* Remove underline in mobile dropdown */
+  .navbar-menu.mobile-open li a.active::after {
+    display: none;
+  }
+  
   /* Not logged in items styling */
   .navbar-menu.not-logged-in li {
     margin-left: 8px;
@@ -304,10 +326,29 @@
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
+  position: relative;
 }
 
 .navbar ul li a:hover {
   color: #2575fc;
+}
+
+.navbar ul li a.active {
+  color: #2575fc;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(37, 117, 252, 0.3);
+}
+
+/* Active state indicator - underline for desktop */
+.navbar ul li a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  border-radius: 2px;
 }
 
 .logout-button {
