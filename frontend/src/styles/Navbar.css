@@ -32,8 +32,8 @@
   }
   
   /* Show hamburger menu only when logged in */
-  .hamburger-menu {
-    display: flex;
+  .logged-in-nav .hamburger-menu {
+    display: flex !important;
   }
   
   /* Default state - hide menu on mobile when logged in */
@@ -73,11 +73,6 @@
     flex-direction: row;
     gap: 10px;
   }
-  
-  /* Hide hamburger when not logged in */
-  .navbar-menu.not-logged-in ~ .hamburger-menu {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
@@ -87,6 +82,11 @@
     border-radius: 25px;
     flex-wrap: nowrap;
     gap: 10px;
+  }
+  
+  /* Show hamburger menu only when logged in */
+  .logged-in-nav .hamburger-menu {
+    display: flex !important;
   }
   
   .navbar-menu.mobile-open {
@@ -143,11 +143,6 @@
   z-index: 1001;
 }
 
-/* Hide hamburger when not logged in */
-.not-logged-in-nav .hamburger-menu {
-  display: none !important;
-}
-
 /* Desktop view - always show menu normally, hide hamburger */
 @media (min-width: 769px) {
   .hamburger-menu {
@@ -179,6 +174,17 @@
     width: auto !important;
     display: inline-block !important;
     padding: 8px 18px !important;
+  }
+}
+
+/* Mobile-specific hamburger visibility */
+@media (max-width: 768px) {
+  .logged-in-nav .hamburger-menu {
+    display: flex !important;
+  }
+  
+  .not-logged-in-nav .hamburger-menu {
+    display: none !important;
   }
 }
 
