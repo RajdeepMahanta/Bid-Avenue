@@ -73,7 +73,7 @@ const Navbar = () => {
 
   return (
     <div className="navbar-container">
-      <nav className="navbar">
+      <nav className={`navbar ${isLoggedIn ? 'logged-in-nav' : 'not-logged-in-nav'}`}>
         <h1>
           <Link to="/">Bid Avenue</Link>
         </h1>
